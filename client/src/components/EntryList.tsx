@@ -1,6 +1,11 @@
 import forgeAPI from '@/utils/forgeAPI'
 import { type UseQueryResult, useQueryClient } from '@tanstack/react-query'
-import { ConfirmationModal, Pagination, WithQuery } from 'lifeforge-ui'
+import {
+  ConfirmationModal,
+  EmptyStateScreen,
+  Pagination,
+  WithQuery
+} from 'lifeforge-ui'
 import { useModalStore } from 'lifeforge-ui'
 import { useCallback, useEffect } from 'react'
 import { toast } from 'react-toastify'
@@ -62,56 +67,64 @@ function EntryList({
 
   return (
     <WithQuery query={dataQuery}>
-      {data => (
-        <>
-          <Pagination
-            className="pagination mb-6"
-            currentPage={page}
-            totalPages={data.totalPages}
-            onPageChange={setPage}
-          />
-          <ul className="space-y-3">
-            {data.items.map(entry => {
-              if (entry.type === 'audio') {
-                return (
-                  <AudioEntry
-                    key={entry.id}
-                    currentPage={page}
-                    entry={entry}
-                    onDelete={handleDeleteEntry(entry.id)}
-                  />
-                )
-              }
+      {data =>
+        data.totalItems > 0 ? (
+          <>
+            <Pagination
+              className="pagination mb-6"
+              currentPage={page}
+              totalPages={data.totalPages}
+              onPageChange={setPage}
+            />
+            <ul className="space-y-3">
+              {data.items.map(entry => {
+                if (entry.type === 'audio') {
+                  return (
+                    <AudioEntry
+                      key={entry.id}
+                      currentPage={page}
+                      entry={entry}
+                      onDelete={handleDeleteEntry(entry.id)}
+                    />
+                  )
+                }
 
-              if (entry.type === 'text') {
-                return (
-                  <TextEntry
-                    key={entry.id}
-                    entry={entry}
-                    onDelete={handleDeleteEntry(entry.id)}
-                  />
-                )
-              }
+                if (entry.type === 'text') {
+                  return (
+                    <TextEntry
+                      key={entry.id}
+                      entry={entry}
+                      onDelete={handleDeleteEntry(entry.id)}
+                    />
+                  )
+                }
 
-              if (entry.type === 'photos') {
-                return (
-                  <PhotosEntry
-                    key={entry.id}
-                    entry={entry}
-                    onDelete={handleDeleteEntry(entry.id)}
-                  />
-                )
-              }
-            })}
-          </ul>
-          <Pagination
-            className="pagination mt-6 mb-24 md:mb-6"
-            currentPage={page}
-            totalPages={data.totalPages}
-            onPageChange={setPage}
+                if (entry.type === 'photos') {
+                  return (
+                    <PhotosEntry
+                      key={entry.id}
+                      entry={entry}
+                      onDelete={handleDeleteEntry(entry.id)}
+                    />
+                  )
+                }
+              })}
+            </ul>
+            <Pagination
+              className="pagination mb-24 mt-6 md:mb-6"
+              currentPage={page}
+              totalPages={data.totalPages}
+              onPageChange={setPage}
+            />
+          </>
+        ) : (
+          <EmptyStateScreen
+            icon="tabler:history-off"
+            name="entries"
+            namespace="apps.momentVault"
           />
-        </>
-      )}
+        )
+      }
     </WithQuery>
   )
 }

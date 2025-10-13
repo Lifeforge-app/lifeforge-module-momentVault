@@ -80,6 +80,7 @@ function PhotosEntry({
                 <PhotoAlbum
                   layout="rows"
                   photos={photos}
+                  // @ts-expect-error - Some issue with the types
                   renderPhoto={({ imageProps }) => (
                     <div style={imageProps.style}>
                       <Zoom zoomMargin={64}>

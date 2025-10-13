@@ -27,5 +27,11 @@
     "video": "Video",
     "text": "Teks",
     "photos": "Gambar"
+  },
+  "empty": {
+    "entries": {
+      "title": "Tiada Entri Ditemui",
+      "description": "Mula merakam detikmu sekarang!"
+    }
   }
 }

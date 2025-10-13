@@ -27,5 +27,11 @@
     "video": "Video",
     "text": "Text",
     "photos": "Photos"
+  },
+  "empty": {
+    "entries": {
+      "title": "No Entries Found",
+      "description": "Start capturing your moments now!"
+    }
   }
 }

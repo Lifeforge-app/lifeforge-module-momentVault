@@ -27,5 +27,11 @@
     "video": "视频",
     "text": "文本",
     "photos": "照片"
+  },
+  "empty": {
+    "entries": {
+      "title": "未找到条目",
+      "description": "立即开始记录你的每一刻吧！"
+    }
   }
 }

@@ -118,6 +118,7 @@ function PhotoType({ onSuccess }: { onSuccess: () => void }) {
                 width: photo.width,
                 height: photo.height
               }))}
+              // @ts-expect-error - Some issue with the types
               renderPhoto={({ imageProps }) => (
                 <img
                   {...imageProps}

@@ -1,5 +1,4 @@
 import forgeAPI from '@/utils/forgeAPI'
-import { Menu, MenuButton, MenuItems } from '@headlessui/react'
 import { useQuery } from '@tanstack/react-query'
 import {
   Button,
@@ -48,37 +47,34 @@ function MomentVault() {
     <>
       <ModuleHeader
         actionButton={
-          <Menu as="div" className="relative z-50 hidden md:block">
-            <Button
-              as={MenuButton}
-              className="hidden md:flex"
-              icon="tabler:plus"
-              tProps={{ item: t('items.entry') }}
-              onClick={() => {}}
-            >
-              new
-            </Button>
-            <MenuItems
-              transition
-              anchor="bottom end"
-              className="bg-bg-100 dark:bg-bg-800 mt-2 w-[var(--button-width)] overflow-hidden overscroll-contain rounded-md shadow-lg outline-hidden transition duration-100 ease-out focus:outline-hidden data-closed:scale-95 data-closed:opacity-0"
-            >
-              {[
-                { icon: 'tabler:file-text', type: 'text' },
-                { icon: 'tabler:microphone', type: 'audio' },
-                { icon: 'tabler:camera', type: 'photos' },
-                { icon: 'tabler:video', type: 'video' }
-              ].map(({ icon, type }) => (
-                <ContextMenuItem
-                  key={type}
-                  icon={icon}
-                  label={type}
-                  namespace="apps.momentVault"
-                  onClick={handleAddEntry(type)}
-                />
-              ))}
-            </MenuItems>
-          </Menu>
+          <ContextMenu
+            buttonComponent={
+              <Button
+                className="hidden md:flex"
+                icon="tabler:plus"
+                tProps={{ item: t('items.entry') }}
+                onClick={() => {}}
+              >
+                new
+              </Button>
+            }
+            classNames={{ button: 'hidden:md:block' }}
+          >
+            {[
+              { icon: 'tabler:file-text', type: 'text' },
+              { icon: 'tabler:microphone', type: 'audio' },
+              { icon: 'tabler:camera', type: 'photos' },
+              { icon: 'tabler:video', type: 'video' }
+            ].map(({ icon, type }) => (
+              <ContextMenuItem
+                key={type}
+                icon={icon}
+                label={type}
+                namespace="apps.momentVault"
+                onClick={handleAddEntry(type)}
+              />
+            ))}
+          </ContextMenu>
         }
       />
       <EntryList dataQuery={dataQuery} page={page} setPage={setPage} />
