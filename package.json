@@ -15,7 +15,7 @@
     "groq-sdk": "^0.33.0",
     "lifeforge-ui": "workspace:*",
     "react": "^19.2.0",
-    "react-i18next": "^16.0.0",
+    "react-i18next": "^15.1.1",
     "react-medium-image-zoom": "^5.4.0",
     "react-photo-album": "^3.1.0",
     "react-toastify": "^11.0.5",
