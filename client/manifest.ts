@@ -9,5 +9,5 @@ export default {
     'moment-vault': lazy(() => import('@'))
   },
   requiredAPIKeys: ['openai'],
-  category: '02.Lifestyle'
+  category: 'Lifestyle'
 } satisfies ModuleConfig
