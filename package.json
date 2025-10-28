@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@types/fluent-ffmpeg": "^2.1.27",
-    "@types/react": "^19.2.2",
+    "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.1",
     "@types/request": "^2.48.13"
   }
