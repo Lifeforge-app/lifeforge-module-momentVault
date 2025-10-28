@@ -10,6 +10,7 @@ import {
 import { useModalStore } from 'lifeforge-ui'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import 'react-photo-album/styles.css'
 import type { InferOutput } from 'shared'
 
 import EntryList from './components/EntryList'
