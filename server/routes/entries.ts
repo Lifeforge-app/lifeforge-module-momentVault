@@ -169,6 +169,40 @@ const update = forgeController
       .execute()
   )
 
+const toggleReviewed = forgeController
+  .mutation()
+  .description('Toggle the reviewed status of a moment vault entry')
+  .input({
+    query: z.object({
+      id: z.string()
+    })
+  })
+  .existenceCheck('query', {
+    id: 'moment_vault__entries'
+  })
+  .callback(async ({ pb, query: { id } }) => {
+    const entry = await pb.getOne
+      .collection('moment_vault__entries')
+      .id(id)
+      .execute()
+
+    if (entry.type !== 'audio') {
+      throw new ClientError(
+        'Reviewed status can only be toggled for audio entries'
+      )
+    }
+
+    const updatedEntry = await pb.update
+      .collection('moment_vault__entries')
+      .id(id)
+      .data({
+        reviewed: !entry.reviewed
+      })
+      .execute()
+
+    return updatedEntry
+  })
+
 const remove = forgeController
   .mutation()
   .description('Delete a moment vault entry')
@@ -189,5 +223,6 @@ export default forgeRouter({
   list,
   create,
   update,
+  toggleReviewed,
   remove
 })

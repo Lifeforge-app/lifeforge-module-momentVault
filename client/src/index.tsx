@@ -1,3 +1,4 @@
+import { AudioPlayerProvider } from '@/providers/AudioPlayerProvider'
 import forgeAPI from '@/utils/forgeAPI'
 import { useQuery } from '@tanstack/react-query'
 import {
@@ -45,7 +46,7 @@ function MomentVault() {
   )
 
   return (
-    <>
+    <AudioPlayerProvider>
       <ModuleHeader
         actionButton={
           <ContextMenu
@@ -100,7 +101,7 @@ function MomentVault() {
           />
         ))}
       </ContextMenu>
-    </>
+    </AudioPlayerProvider>
   )
 }
 

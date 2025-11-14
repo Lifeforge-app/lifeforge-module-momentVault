@@ -7,6 +7,7 @@ const momentVaultSchemas = {
       file: z.array(z.string()),
       content: z.string(),
       transcription: z.string(),
+      reviewed: z.boolean(),
       created: z.string(),
       updated: z.string()
     }),
@@ -86,6 +87,15 @@ const momentVaultSchemas = {
           required: false,
           system: false,
           type: 'text'
+        },
+        {
+          hidden: false,
+          id: 'bool345215585',
+          name: 'reviewed',
+          presentable: false,
+          required: false,
+          system: false,
+          type: 'bool'
         },
         {
           hidden: false,

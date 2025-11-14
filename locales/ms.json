@@ -9,11 +9,17 @@
     "audio": "Audio",
     "photos": "Foto",
     "video": "Video",
-    "transcribeToText": "Transkrip ke Teks"
+    "transcribeToText": "Transkrip ke Teks",
+    "editTranscription": "Sunting Transkripsi",
+    "retranscribe": "Transkripsi Semula",
+    "markAsReviewed": "Tandakan sebagai Ditinjau",
+    "markAsUnreviewed": "Tandakan sebagai Belum Disemak",
+    "cleanup": "Bersihkan"
   },
   "modals": {
     "addEntry": "Tambah Entri",
-    "updateEntry": "Kemas Kini Entri"
+    "updateEntry": "Kemas Kini Entri",
+    "editTranscription": "Edit Transkripsi"
   },
   "inputs": {
     "entryType": "Jenis Entri",

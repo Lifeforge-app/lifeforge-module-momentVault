@@ -9,11 +9,17 @@
     "audio": "Audio",
     "photos": "Photos",
     "video": "Video",
-    "transcribeToText": "Transcribe to Text"
+    "transcribeToText": "Transcribe to Text",
+    "editTranscription": "Edit Transcription",
+    "retranscribe": "Retranscribe",
+    "markAsReviewed": "Mark as Reviewed",
+    "markAsUnreviewed": "Mark as Unreviewed",
+    "cleanup": "Cleanup"
   },
   "modals": {
     "addEntry": "Add Entry",
-    "updateEntry": "Update Entry"
+    "updateEntry": "Update Entry",
+    "editTranscription": "Edit Transcription"
   },
   "inputs": {
     "entryType": "Entry Type",

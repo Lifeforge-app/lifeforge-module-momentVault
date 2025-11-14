@@ -1,17 +1,17 @@
 import fs from 'fs'
-import Groq from 'groq-sdk'
+import OpenAI from 'openai'
 
 export const getTranscription = async (
   filePath: string,
   apiKey: string
 ): Promise<string | null> => {
-  const groq = new Groq({
+  const openai = new OpenAI({
     apiKey
   })
 
-  const transcription = await groq.audio.transcriptions.create({
+  const transcription = await openai.audio.transcriptions.create({
     file: fs.createReadStream(filePath),
-    model: 'whisper-large-v3'
+    model: 'whisper-1'
   })
 
   return transcription.text
