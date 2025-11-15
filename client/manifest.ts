@@ -6,7 +6,7 @@ export default {
   icon: 'tabler:history',
   hasAI: true,
   routes: {
-    'moment-vault': lazy(() => import('@'))
+    '/': lazy(() => import('@'))
   },
   requiredAPIKeys: ['openai'],
   category: 'Lifestyle'
