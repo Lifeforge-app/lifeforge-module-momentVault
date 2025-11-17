@@ -11,7 +11,12 @@ import { getTranscription } from '../utils/transcription'
 
 const transcribeExisted = forgeController
   .mutation()
-  .description('Transcribe an existing audio entry')
+  .description({
+    en: 'Transcribe an existing audio entry',
+    ms: 'Transkripsi entri audio sedia ada',
+    'zh-CN': '转录现有音频条目',
+    'zh-TW': '轉錄現有音訊條目'
+  })
   .input({
     query: z.object({
       id: z.string()
@@ -94,7 +99,12 @@ const transcribeExisted = forgeController
 
 const transcribeNew = forgeController
   .mutation()
-  .description('Transcribe a new audio file')
+  .description({
+    en: 'Transcribe a new audio file',
+    ms: 'Transkripsi fail audio baharu',
+    'zh-CN': '转录新音频文件',
+    'zh-TW': '轉錄新音訊檔案'
+  })
   .input({})
   .media({
     file: {
@@ -131,7 +141,12 @@ const transcribeNew = forgeController
 
 const updateTranscription = forgeController
   .mutation()
-  .description('Update transcription of an existing audio entry')
+  .description({
+    en: 'Update transcription of an audio entry',
+    ms: 'Kemas kini transkripsi entri audio',
+    'zh-CN': '更新音频条目的转录',
+    'zh-TW': '更新音訊條目的轉錄'
+  })
   .input({
     query: z.object({
       id: z.string()
@@ -157,7 +172,12 @@ const updateTranscription = forgeController
 
 const cleanupTranscription = forgeController
   .mutation()
-  .description('Cleanup transcription data for an audio entry')
+  .description({
+    en: 'Clean up and improve transcription text',
+    ms: 'Bersihkan dan tingkatkan teks transkripsi',
+    'zh-CN': '清理并改进转录文本',
+    'zh-TW': '清理並改進轉錄文本'
+  })
   .input({
     query: z.object({
       id: z.string(),

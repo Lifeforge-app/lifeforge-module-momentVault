@@ -8,7 +8,12 @@ import { convertToMp3 } from '../utils/convertToMP3'
 
 const list = forgeController
   .query()
-  .description('Get all moment vault entries')
+  .description({
+    en: 'Get paginated list of moment vault entries',
+    ms: 'Dapatkan senarai halaman entri peti saat',
+    'zh-CN': '获取分页的回忆金库条目列表',
+    'zh-TW': '獲取分頁的回憶金庫條目列表'
+  })
   .input({
     query: z.object({
       page: z
@@ -88,7 +93,12 @@ export const createPhotosEntry = async (
 
 const create = forgeController
   .mutation()
-  .description('Create a new moment vault entry')
+  .description({
+    en: 'Create a new moment vault entry',
+    ms: 'Cipta entri peti saat baharu',
+    'zh-CN': '创建新的回忆金库条目',
+    'zh-TW': '創建新的回憶金庫條目'
+  })
   .input({
     body: z.object({
       type: z.enum(['text', 'audio', 'photos']),
@@ -149,7 +159,12 @@ const create = forgeController
 
 const update = forgeController
   .mutation()
-  .description('Update a moment vault entry')
+  .description({
+    en: 'Update content of a moment vault entry',
+    ms: 'Kemas kini kandungan entri peti saat',
+    'zh-CN': '更新回忆金库条目的内容',
+    'zh-TW': '更新回憶金庫條目的內容'
+  })
   .input({
     query: z.object({
       id: z.string()
@@ -171,7 +186,12 @@ const update = forgeController
 
 const toggleReviewed = forgeController
   .mutation()
-  .description('Toggle the reviewed status of a moment vault entry')
+  .description({
+    en: 'Toggle reviewed status of an audio entry',
+    ms: 'Togol status semakan entri audio',
+    'zh-CN': '切换音频条目的审阅状态',
+    'zh-TW': '切換音訊條目的審閱狀態'
+  })
   .input({
     query: z.object({
       id: z.string()
@@ -205,7 +225,12 @@ const toggleReviewed = forgeController
 
 const remove = forgeController
   .mutation()
-  .description('Delete a moment vault entry')
+  .description({
+    en: 'Delete a moment vault entry',
+    ms: 'Padam entri peti saat',
+    'zh-CN': '删除回忆金库条目',
+    'zh-TW': '刪除回憶金庫條目'
+  })
   .input({
     query: z.object({
       id: z.string()
