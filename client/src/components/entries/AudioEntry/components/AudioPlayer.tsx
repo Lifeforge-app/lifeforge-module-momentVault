@@ -15,7 +15,7 @@ import type WaveSurfer from 'wavesurfer.js'
 // Separate component for timer display to prevent parent rerenders
 const TimeDisplay = memo(
   ({ currentTime, totalTime }: { currentTime: number; totalTime: number }) => (
-    <p className="text-bg-500 w-full whitespace-nowrap text-left text-sm sm:w-auto">
+    <p className="text-bg-500 w-full text-left text-sm whitespace-nowrap sm:w-auto">
       {dayjs().startOf('day').second(currentTime).format('mm:ss')} /{' '}
       {dayjs().startOf('day').second(totalTime).format('mm:ss')}
     </p>
@@ -134,7 +134,7 @@ function AudioPlayer({
         <>
           {currentActive === instanceId && (
             <Button
-              className="component-bg-lighter-with-hover p-2! px-4!"
+              className="component-bg-lighter-with-hover mb-6 p-2! px-4! sm:mb-0"
               variant="plain"
               onClick={() => {
                 let newSpeed = playbackSpeed + 0.5
@@ -159,7 +159,7 @@ function AudioPlayer({
       <div className="relative flex w-full flex-col items-center gap-2 *:first:w-full sm:flex-row sm:gap-3">
         {!ready && (
           <Icon
-            className="text-bg-500 absolute left-1/2 top-1/2 size-8 -translate-x-1/2 -translate-y-1/2"
+            className="text-bg-500 absolute top-1/2 left-1/2 size-8 -translate-x-1/2 -translate-y-1/2"
             icon="svg-spinners:ring-resize"
           />
         )}
