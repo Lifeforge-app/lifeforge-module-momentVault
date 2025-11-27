@@ -24,7 +24,7 @@ function EntryList({
     InferOutput<typeof forgeAPI.momentVault.entries.list>
   >
   page: number
-  setPage: (page: number) => void
+  setPage: React.Dispatch<React.SetStateAction<number>>
 }) {
   const queryClient = useQueryClient()
 
@@ -111,7 +111,7 @@ function EntryList({
               })}
             </ul>
             <Pagination
-              className="pagination mb-24 mt-6 md:mb-6"
+              className="pagination mt-6 mb-24 md:mb-6"
               currentPage={page}
               totalPages={data.totalPages}
               onPageChange={setPage}
