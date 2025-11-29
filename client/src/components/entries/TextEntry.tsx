@@ -3,7 +3,7 @@ import ModifyTextEntryModal from '@/modals/ModifyTextEntryModal'
 import { Icon } from '@iconify/react'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import { ContextMenu, ContextMenuItem, ItemWrapper } from 'lifeforge-ui'
+import { ContextMenu, ContextMenuItem, Card } from 'lifeforge-ui'
 import { useModalStore } from 'lifeforge-ui'
 import { useCallback } from 'react'
 
@@ -25,7 +25,7 @@ function TextEntry({
   }, [entry])
 
   return (
-    <ItemWrapper as="li">
+    <Card as="li">
       <div className="mr-16">
         <div className="border-custom-500 border-l-4 pl-4">
           <p className="text-bg-500 whitespace-pre-wrap">{entry.content}</p>
@@ -47,7 +47,7 @@ function TextEntry({
           onClick={onDelete}
         />
       </ContextMenu>
-    </ItemWrapper>
+    </Card>
   )
 }
 

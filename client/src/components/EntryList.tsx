@@ -72,7 +72,7 @@ function EntryList({
           <>
             <Pagination
               className="pagination mb-6"
-              currentPage={page}
+              page={page}
               totalPages={data.totalPages}
               onPageChange={setPage}
             />
@@ -112,7 +112,7 @@ function EntryList({
             </ul>
             <Pagination
               className="pagination mt-6 mb-24 md:mb-6"
-              currentPage={page}
+              page={page}
               totalPages={data.totalPages}
               onPageChange={setPage}
             />
@@ -120,8 +120,10 @@ function EntryList({
         ) : (
           <EmptyStateScreen
             icon="tabler:history-off"
-            name="entries"
-            namespace="apps.momentVault"
+            message={{
+              id: 'entries',
+              namespace: 'apps.momentVault'
+            }}
           />
         )
       }

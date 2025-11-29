@@ -35,8 +35,8 @@ function TextType({ onSuccess }: { onSuccess: () => void }) {
         label="Text Content"
         namespace="apps.momentVault"
         placeholder="What a beautiful day..."
-        setValue={setText}
         value={text}
+        onChange={setText}
       />
       <Button
         className="mt-6 w-full"

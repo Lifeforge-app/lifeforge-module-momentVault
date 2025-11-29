@@ -10,7 +10,7 @@ import {
   ConfirmationModal,
   ContextMenu,
   ContextMenuItem,
-  ItemWrapper
+  Card
 } from 'lifeforge-ui'
 import { useModalStore } from 'lifeforge-ui'
 import { useState } from 'react'
@@ -98,7 +98,7 @@ function AudioEntry({
   }
 
   return (
-    <ItemWrapper as="li" id={`audio-entry-${entry.id}`}>
+    <Card as="li" id={`audio-entry-${entry.id}`}>
       <div className="mr-16">
         <AudioPlayer entry={entry} />
       </div>
@@ -174,7 +174,7 @@ function AudioEntry({
           onClick={onDelete}
         />
       </ContextMenu>
-    </ItemWrapper>
+    </Card>
   )
 }
 

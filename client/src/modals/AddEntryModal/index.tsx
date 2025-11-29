@@ -100,7 +100,7 @@ function AddEntryModal({
           icon="tabler:apps"
           label="Entry Type"
           namespace="apps.momentVault"
-          setValue={setInnerOpenType}
+          onChange={setInnerOpenType}
           value={innerOpenType}
         >
           {TYPES.map(({ id, icon }, i) => (

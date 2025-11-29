@@ -3,7 +3,7 @@ import forgeAPI from '@/utils/forgeAPI'
 import { Icon } from '@iconify/react'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import { ContextMenu, ContextMenuItem, ItemWrapper } from 'lifeforge-ui'
+import { ContextMenu, ContextMenuItem, Card } from 'lifeforge-ui'
 import { useEffect, useState } from 'react'
 import Zoom from 'react-medium-image-zoom'
 import PhotoAlbum from 'react-photo-album'
@@ -67,7 +67,7 @@ function PhotosEntry({
   }, [entry.file])
 
   return (
-    <ItemWrapper as="li">
+    <Card as="li">
       <div className="flex w-full items-start gap-3">
         {loading ? (
           <div className="flex-center h-96 w-full">
@@ -118,7 +118,7 @@ function PhotosEntry({
       <p className="text-bg-500 mt-4 flex items-center gap-2">
         <Icon icon="tabler:clock" /> {dayjs(entry.created).fromNow()}
       </p>
-    </ItemWrapper>
+    </Card>
   )
 }
 
