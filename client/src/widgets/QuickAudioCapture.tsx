@@ -1,14 +1,20 @@
+import recordEndSfx from '@/assets/record_end.opus'
+import recordStartSfx from '@/assets/record_start.opus'
 import forgeAPI from '@/utils/forgeAPI'
 import { useQueryClient } from '@tanstack/react-query'
 import { Button, Widget } from 'lifeforge-ui'
 import { useCallback, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
-import type { WidgetConfig } from 'shared'
+import { type WidgetConfig, useDivSize } from 'shared'
 
 type RecordingState = 'idle' | 'recording' | 'submitting'
 
 function QuickAudioCapture() {
   const queryClient = useQueryClient()
+
+  const wrapperRef = useRef<HTMLDivElement | null>(null)
+
+  const { width, height } = useDivSize(wrapperRef)
 
   const [state, setState] = useState<RecordingState>('idle')
 
@@ -17,6 +23,12 @@ function QuickAudioCapture() {
   const mediaRecorderRef = useRef<MediaRecorder | null>(null)
 
   const audioChunksRef = useRef<Blob[]>([])
+
+  const playSound = useCallback((src: string) => {
+    const audio = new Audio(src)
+
+    audio.play().catch(() => {})
+  }, [])
 
   const startRecording = useCallback(async () => {
     try {
@@ -39,13 +51,16 @@ function QuickAudioCapture() {
 
       mediaRecorder.start()
       setState('recording')
+      playSound(recordStartSfx)
     } catch {
       toast.error('Failed to access microphone')
     }
-  }, [])
+  }, [playSound])
 
   const stopRecording = useCallback(async () => {
     if (!mediaRecorderRef.current || state !== 'recording') return
+
+    playSound(recordEndSfx)
 
     return new Promise<void>(resolve => {
       mediaRecorderRef.current!.onstop = async () => {
@@ -86,11 +101,12 @@ function QuickAudioCapture() {
 
       mediaRecorderRef.current!.stop()
     })
-  }, [state, queryClient])
+  }, [state, queryClient, playSound])
 
   const handlePointerDown = useCallback(
     (e: React.PointerEvent) => {
       e.preventDefault()
+      ;(e.target as HTMLElement).setPointerCapture(e.pointerId)
 
       if (state === 'idle') {
         startRecording()
@@ -102,17 +118,7 @@ function QuickAudioCapture() {
   const handlePointerUp = useCallback(
     (e: React.PointerEvent) => {
       e.preventDefault()
-
-      if (state === 'recording') {
-        stopRecording()
-      }
-    },
-    [state, stopRecording]
-  )
-
-  const handlePointerLeave = useCallback(
-    (e: React.PointerEvent) => {
-      e.preventDefault()
+      ;(e.target as HTMLElement).releasePointerCapture(e.pointerId)
 
       if (state === 'recording') {
         stopRecording()
@@ -122,20 +128,25 @@ function QuickAudioCapture() {
   )
 
   return (
-    <Widget icon="tabler:microphone" namespace="apps.momentVault">
-      <div className="flex min-h-0 flex-1 items-center justify-center">
+    <Widget
+      className="p-2! min-[400px]:p-4!"
+      icon="tabler:microphone"
+      namespace="apps.momentVault"
+    >
+      <div ref={wrapperRef} className="flex-center min-h-0 flex-1">
         <Button
-          className={`size-20! rounded-full! ${state === 'recording' ? 'animate-pulse' : ''}`}
+          className={`aspect-square min-[400px]:rounded-full! ${
+            width < height ? 'h-full w-full min-[400px]:h-auto' : 'h-full'
+          } ${state === 'recording' ? 'animate-pulse' : ''}`}
           icon={
             state === 'recording'
               ? 'tabler:player-stop-filled'
               : 'tabler:microphone'
           }
-          iconClassName="size-10!"
+          iconClassName="size-full! sm:size-10!"
           loading={state === 'submitting'}
           variant={state === 'recording' ? 'secondary' : 'primary'}
           onPointerDown={handlePointerDown}
-          onPointerLeave={handlePointerLeave}
           onPointerUp={handlePointerUp}
         />
       </div>
