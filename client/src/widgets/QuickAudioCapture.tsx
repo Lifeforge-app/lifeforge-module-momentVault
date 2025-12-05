@@ -24,8 +24,17 @@ function QuickAudioCapture() {
 
   const isStartingRef = useRef(false)
 
+  const lastVibrationRef = useRef(0)
+
   const vibrate = useCallback((pattern: number | number[]) => {
     if ('vibrate' in navigator) {
+      const now = Date.now()
+
+      // Debounce vibrations - ignore if less than 300ms since last vibration
+      if (now - lastVibrationRef.current < 300) return
+
+      lastVibrationRef.current = now
+      navigator.vibrate(0)
       navigator.vibrate(pattern)
     }
   }, [])
@@ -69,7 +78,7 @@ function QuickAudioCapture() {
     if (!mediaRecorderRef.current || state !== 'recording') return
 
     // Double vibration to indicate recording stopped
-    vibrate([50, 50, 50])
+    vibrate([30, 80, 30])
 
     return new Promise<void>(resolve => {
       mediaRecorderRef.current!.onstop = async () => {
