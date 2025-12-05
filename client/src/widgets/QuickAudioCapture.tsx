@@ -22,28 +22,7 @@ function QuickAudioCapture() {
 
   const audioChunksRef = useRef<Blob[]>([])
 
-  const isStartingRef = useRef(false)
-
-  const lastVibrationRef = useRef(0)
-
-  const vibrate = useCallback((pattern: number | number[]) => {
-    if ('vibrate' in navigator) {
-      const now = Date.now()
-
-      // Debounce vibrations - ignore if less than 300ms since last vibration
-      if (now - lastVibrationRef.current < 300) return
-
-      lastVibrationRef.current = now
-      navigator.vibrate(0)
-      navigator.vibrate(pattern)
-    }
-  }, [])
-
   const startRecording = useCallback(async () => {
-    if (isStartingRef.current) return
-
-    isStartingRef.current = true
-
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
 
@@ -62,23 +41,15 @@ function QuickAudioCapture() {
         }
       }
 
-      // Short vibration to indicate recording started
-      vibrate(50)
-
       mediaRecorder.start()
       setState('recording')
     } catch {
       toast.error('Failed to access microphone')
-    } finally {
-      isStartingRef.current = false
     }
-  }, [vibrate])
+  }, [])
 
   const stopRecording = useCallback(async () => {
     if (!mediaRecorderRef.current || state !== 'recording') return
-
-    // Double vibration to indicate recording stopped
-    vibrate([30, 80, 30])
 
     return new Promise<void>(resolve => {
       mediaRecorderRef.current!.onstop = async () => {
@@ -119,7 +90,7 @@ function QuickAudioCapture() {
 
       mediaRecorderRef.current!.stop()
     })
-  }, [state, queryClient, vibrate])
+  }, [state, queryClient])
 
   const activePointerRef = useRef<number | null>(null)
 
