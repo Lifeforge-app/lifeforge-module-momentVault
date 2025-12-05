@@ -103,10 +103,13 @@ function QuickAudioCapture() {
     })
   }, [state, queryClient, playSound])
 
+  const activePointerRef = useRef<number | null>(null)
+
   const handlePointerDown = useCallback(
     (e: React.PointerEvent) => {
       e.preventDefault()
-      ;(e.target as HTMLElement).setPointerCapture(e.pointerId)
+      e.currentTarget.setPointerCapture(e.pointerId)
+      activePointerRef.current = e.pointerId
 
       if (state === 'idle') {
         startRecording()
@@ -118,7 +121,39 @@ function QuickAudioCapture() {
   const handlePointerUp = useCallback(
     (e: React.PointerEvent) => {
       e.preventDefault()
-      ;(e.target as HTMLElement).releasePointerCapture(e.pointerId)
+
+      if (activePointerRef.current !== e.pointerId) return
+
+      e.currentTarget.releasePointerCapture(e.pointerId)
+      activePointerRef.current = null
+
+      if (state === 'recording') {
+        stopRecording()
+      }
+    },
+    [state, stopRecording]
+  )
+
+  const handlePointerCancel = useCallback(
+    (e: React.PointerEvent) => {
+      e.preventDefault()
+
+      if (activePointerRef.current !== e.pointerId) return
+
+      activePointerRef.current = null
+
+      if (state === 'recording') {
+        stopRecording()
+      }
+    },
+    [state, stopRecording]
+  )
+
+  const handleLostPointerCapture = useCallback(
+    (e: React.PointerEvent) => {
+      if (activePointerRef.current !== e.pointerId) return
+
+      activePointerRef.current = null
 
       if (state === 'recording') {
         stopRecording()
@@ -146,6 +181,8 @@ function QuickAudioCapture() {
           iconClassName="size-full! sm:size-10!"
           loading={state === 'submitting'}
           variant={state === 'recording' ? 'secondary' : 'primary'}
+          onLostPointerCapture={handleLostPointerCapture}
+          onPointerCancel={handlePointerCancel}
           onPointerDown={handlePointerDown}
           onPointerUp={handlePointerUp}
         />
