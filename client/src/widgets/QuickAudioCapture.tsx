@@ -9,6 +9,14 @@ import { type WidgetConfig, useDivSize } from 'shared'
 
 type RecordingState = 'idle' | 'recording' | 'submitting'
 
+// Preload audio elements for reliable playback
+const startAudio = new Audio(recordStartSfx)
+
+const endAudio = new Audio(recordEndSfx)
+
+startAudio.load()
+endAudio.load()
+
 function QuickAudioCapture() {
   const queryClient = useQueryClient()
 
@@ -24,9 +32,8 @@ function QuickAudioCapture() {
 
   const audioChunksRef = useRef<Blob[]>([])
 
-  const playSound = useCallback((src: string) => {
-    const audio = new Audio(src)
-
+  const playSound = useCallback((audio: HTMLAudioElement) => {
+    audio.currentTime = 0
     audio.play().catch(() => {})
   }, [])
 
@@ -51,7 +58,7 @@ function QuickAudioCapture() {
 
       mediaRecorder.start()
       setState('recording')
-      playSound(recordStartSfx)
+      playSound(startAudio)
     } catch {
       toast.error('Failed to access microphone')
     }
@@ -60,7 +67,7 @@ function QuickAudioCapture() {
   const stopRecording = useCallback(async () => {
     if (!mediaRecorderRef.current || state !== 'recording') return
 
-    playSound(recordEndSfx)
+    playSound(endAudio)
 
     return new Promise<void>(resolve => {
       mediaRecorderRef.current!.onstop = async () => {
