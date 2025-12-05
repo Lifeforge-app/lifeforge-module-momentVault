@@ -3,7 +3,7 @@ import recordStartSfx from '@/assets/record_start.opus'
 import forgeAPI from '@/utils/forgeAPI'
 import { useQueryClient } from '@tanstack/react-query'
 import { Button, Widget } from 'lifeforge-ui'
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import { type WidgetConfig, useDivSize } from 'shared'
 
@@ -105,10 +105,30 @@ function QuickAudioCapture() {
 
   const activePointerRef = useRef<number | null>(null)
 
+  const stopRecordingRef = useRef(stopRecording)
+
+  stopRecordingRef.current = stopRecording
+
+  useEffect(() => {
+    const handleGlobalPointerUp = (e: PointerEvent) => {
+      if (activePointerRef.current === e.pointerId) {
+        activePointerRef.current = null
+        stopRecordingRef.current()
+      }
+    }
+
+    window.addEventListener('pointerup', handleGlobalPointerUp)
+    window.addEventListener('pointercancel', handleGlobalPointerUp)
+
+    return () => {
+      window.removeEventListener('pointerup', handleGlobalPointerUp)
+      window.removeEventListener('pointercancel', handleGlobalPointerUp)
+    }
+  }, [])
+
   const handlePointerDown = useCallback(
     (e: React.PointerEvent) => {
       e.preventDefault()
-      e.currentTarget.setPointerCapture(e.pointerId)
       activePointerRef.current = e.pointerId
 
       if (state === 'idle') {
@@ -116,50 +136,6 @@ function QuickAudioCapture() {
       }
     },
     [state, startRecording]
-  )
-
-  const handlePointerUp = useCallback(
-    (e: React.PointerEvent) => {
-      e.preventDefault()
-
-      if (activePointerRef.current !== e.pointerId) return
-
-      e.currentTarget.releasePointerCapture(e.pointerId)
-      activePointerRef.current = null
-
-      if (state === 'recording') {
-        stopRecording()
-      }
-    },
-    [state, stopRecording]
-  )
-
-  const handlePointerCancel = useCallback(
-    (e: React.PointerEvent) => {
-      e.preventDefault()
-
-      if (activePointerRef.current !== e.pointerId) return
-
-      activePointerRef.current = null
-
-      if (state === 'recording') {
-        stopRecording()
-      }
-    },
-    [state, stopRecording]
-  )
-
-  const handleLostPointerCapture = useCallback(
-    (e: React.PointerEvent) => {
-      if (activePointerRef.current !== e.pointerId) return
-
-      activePointerRef.current = null
-
-      if (state === 'recording') {
-        stopRecording()
-      }
-    },
-    [state, stopRecording]
   )
 
   return (
@@ -170,7 +146,7 @@ function QuickAudioCapture() {
     >
       <div ref={wrapperRef} className="flex-center min-h-0 flex-1">
         <Button
-          className={`aspect-square min-[400px]:rounded-full! ${
+          className={`aspect-square touch-none min-[400px]:rounded-full! ${
             width < height ? 'h-full w-full min-[400px]:h-auto' : 'h-full'
           } ${state === 'recording' ? 'animate-pulse' : ''}`}
           icon={
@@ -181,10 +157,7 @@ function QuickAudioCapture() {
           iconClassName="size-full! sm:size-10!"
           loading={state === 'submitting'}
           variant={state === 'recording' ? 'secondary' : 'primary'}
-          onLostPointerCapture={handleLostPointerCapture}
-          onPointerCancel={handlePointerCancel}
           onPointerDown={handlePointerDown}
-          onPointerUp={handlePointerUp}
         />
       </div>
     </Widget>
