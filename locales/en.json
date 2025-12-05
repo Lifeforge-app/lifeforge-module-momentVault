@@ -39,5 +39,11 @@
       "title": "No Entries Found",
       "description": "Start capturing your moments now!"
     }
+  },
+  "widgets": {
+    "quickAudioCapture": {
+      "title": "Quick Audio Capture",
+      "description": "Hold to record a quick audio moment."
+    }
   }
 }

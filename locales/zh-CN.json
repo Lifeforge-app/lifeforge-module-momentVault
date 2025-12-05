@@ -39,5 +39,11 @@
       "title": "未找到条目",
       "description": "立即开始记录你的每一刻吧！"
     }
+  },
+  "widgets": {
+    "quickAudioCapture": {
+      "title": "快速录音",
+      "description": "按住以录制音频瞬间。"
+    }
   }
 }

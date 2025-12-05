@@ -39,5 +39,11 @@
       "title": "Tiada Entri Ditemui",
       "description": "Mula merakam detikmu sekarang!"
     }
+  },
+  "widgets": {
+    "quickAudioCapture": {
+      "title": "Tangkap Audio Pantas",
+      "description": "Tekan dan tahan untuk merakam detik audio."
+    }
   }
 }
