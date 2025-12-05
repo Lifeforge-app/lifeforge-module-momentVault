@@ -24,61 +24,31 @@ function QuickAudioCapture() {
 
   const audioChunksRef = useRef<Blob[]>([])
 
-  const audioContextRef = useRef<AudioContext | null>(null)
+  const startAudioRef = useRef<HTMLAudioElement | null>(null)
 
-  const startBufferRef = useRef<AudioBuffer | null>(null)
+  const endAudioRef = useRef<HTMLAudioElement | null>(null)
 
-  const endBufferRef = useRef<AudioBuffer | null>(null)
-
-  useEffect(() => {
-    const loadAudio = async () => {
-      const context = new AudioContext()
-
-      audioContextRef.current = context
-
-      const [startResponse, endResponse] = await Promise.all([
-        fetch(recordStartSfx),
-        fetch(recordEndSfx)
-      ])
-
-      const [startData, endData] = await Promise.all([
-        startResponse.arrayBuffer(),
-        endResponse.arrayBuffer()
-      ])
-
-      const [startBuffer, endBuffer] = await Promise.all([
-        context.decodeAudioData(startData),
-        context.decodeAudioData(endData)
-      ])
-
-      startBufferRef.current = startBuffer
-      endBufferRef.current = endBuffer
+  const initAudio = useCallback(() => {
+    if (!startAudioRef.current) {
+      startAudioRef.current = new Audio(recordStartSfx)
     }
 
-    loadAudio().catch(() => {})
-
-    return () => {
-      audioContextRef.current?.close()
+    if (!endAudioRef.current) {
+      endAudioRef.current = new Audio(recordEndSfx)
     }
   }, [])
 
-  const playSound = useCallback((buffer: AudioBuffer | null) => {
-    const context = audioContextRef.current
+  const playSound = useCallback((audio: HTMLAudioElement | null) => {
+    if (!audio) return
 
-    if (!context || !buffer) return
+    const clone = audio.cloneNode() as HTMLAudioElement
 
-    if (context.state === 'suspended') {
-      context.resume()
-    }
-
-    const source = context.createBufferSource()
-
-    source.buffer = buffer
-    source.connect(context.destination)
-    source.start(0)
+    clone.play().catch(() => {})
   }, [])
 
   const startRecording = useCallback(async () => {
+    initAudio()
+
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
 
@@ -99,16 +69,16 @@ function QuickAudioCapture() {
 
       mediaRecorder.start()
       setState('recording')
-      playSound(startBufferRef.current)
+      playSound(startAudioRef.current)
     } catch {
       toast.error('Failed to access microphone')
     }
-  }, [playSound])
+  }, [initAudio, playSound])
 
   const stopRecording = useCallback(async () => {
     if (!mediaRecorderRef.current || state !== 'recording') return
 
-    playSound(endBufferRef.current)
+    playSound(endAudioRef.current)
 
     return new Promise<void>(resolve => {
       mediaRecorderRef.current!.onstop = async () => {
