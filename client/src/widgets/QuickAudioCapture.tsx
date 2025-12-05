@@ -22,6 +22,8 @@ function QuickAudioCapture() {
 
   const audioChunksRef = useRef<Blob[]>([])
 
+  const isStartingRef = useRef(false)
+
   const vibrate = useCallback((pattern: number | number[]) => {
     if ('vibrate' in navigator) {
       navigator.vibrate(pattern)
@@ -29,6 +31,10 @@ function QuickAudioCapture() {
   }, [])
 
   const startRecording = useCallback(async () => {
+    if (isStartingRef.current) return
+
+    isStartingRef.current = true
+
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
 
@@ -54,6 +60,8 @@ function QuickAudioCapture() {
       setState('recording')
     } catch {
       toast.error('Failed to access microphone')
+    } finally {
+      isStartingRef.current = false
     }
   }, [vibrate])
 
