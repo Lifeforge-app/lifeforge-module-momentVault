@@ -138,6 +138,10 @@ function QuickAudioCapture() {
   const handlePointerDown = useCallback(
     (e: React.PointerEvent) => {
       e.preventDefault()
+
+      // Prevent multiple pointer events from triggering
+      if (activePointerRef.current !== null) return
+
       activePointerRef.current = e.pointerId
 
       if (state === 'idle') {
