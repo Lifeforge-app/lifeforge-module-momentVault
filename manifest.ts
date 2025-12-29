@@ -8,6 +8,12 @@ export default {
   routes: {
     '/': lazy(() => import('@'))
   },
-  requiredAPIKeys: ['openai'],
+  apiAccess: [
+    {
+      key: 'openai',
+      usage: 'Speech to text transcription and text entry summarizing',
+      required: true
+    }
+  ],
   category: 'Lifestyle'
 } satisfies ModuleConfig

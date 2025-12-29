@@ -12,7 +12,6 @@ const momentVaultSchemas = {
       updated: z.string()
     }),
     raw: {
-      id: 'pbc_2203688272',
       listRule: '@request.auth.id != ""',
       viewRule: '@request.auth.id != ""',
       createRule: '@request.auth.id != ""',
@@ -24,7 +23,6 @@ const momentVaultSchemas = {
         {
           autogeneratePattern: '[a-z0-9]{15}',
           hidden: false,
-          id: 'text3208210256',
           max: 15,
           min: 15,
           name: 'id',
@@ -37,7 +35,6 @@ const momentVaultSchemas = {
         },
         {
           hidden: false,
-          id: 'select2363381545',
           maxSelect: 1,
           name: 'type',
           presentable: false,
@@ -48,7 +45,6 @@ const momentVaultSchemas = {
         },
         {
           hidden: false,
-          id: 'file2359244304',
           maxSelect: 99,
           maxSize: 9999999999,
           mimeTypes: [],
@@ -63,7 +59,6 @@ const momentVaultSchemas = {
         {
           autogeneratePattern: '',
           hidden: false,
-          id: 'text4274335913',
           max: 0,
           min: 0,
           name: 'content',
@@ -77,7 +72,6 @@ const momentVaultSchemas = {
         {
           autogeneratePattern: '',
           hidden: false,
-          id: 'text849144196',
           max: 0,
           min: 0,
           name: 'transcription',
@@ -90,7 +84,6 @@ const momentVaultSchemas = {
         },
         {
           hidden: false,
-          id: 'bool345215585',
           name: 'reviewed',
           presentable: false,
           required: false,
@@ -99,7 +92,6 @@ const momentVaultSchemas = {
         },
         {
           hidden: false,
-          id: 'autodate2990389176',
           name: 'created',
           onCreate: true,
           onUpdate: false,
@@ -109,7 +101,6 @@ const momentVaultSchemas = {
         },
         {
           hidden: false,
-          id: 'autodate3332085495',
           name: 'updated',
           onCreate: true,
           onUpdate: true,
