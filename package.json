@@ -1,6 +1,12 @@
 {
-  "name": "moment-vault",
-  "version": "dev. 25w41",
+  "name": "@lifeforge/lifeforge--moment-vault",
+  "displayName": "Moment Vault",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lifeforge-app/lifeforge-module-momentVault.git"
+  },
+  "version": "0.0.1",
+  "author": "Melvin Chia <melvinchia623600@gmail.com>",
   "description": "Capture every moment, cherish your life, revisit anytime.",
   "scripts": {
     "types": "cd client && bun tsc"
@@ -31,5 +37,17 @@
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.1",
     "@types/request": "^2.48.13"
+  },
+  "exports": {
+    "./server": "./server/index.ts",
+    "./manifest": {
+      "types": "./manifest.d.ts",
+      "default": "./manifest.ts"
+    },
+    "./server/schema": "./server/schema.ts"
+  },
+  "lifeforge": {
+    "icon": "tabler:history",
+    "category": "Lifestyle"
   }
 }
