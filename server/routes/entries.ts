@@ -1,8 +1,9 @@
+import fs from 'fs'
+import z from 'zod'
+
 import { PBService } from '@functions/database'
 import { forgeController, forgeRouter } from '@functions/routes'
 import { ClientError } from '@functions/routes/utils/response'
-import fs from 'fs'
-import z from 'zod'
 
 import { convertToMp3 } from '../utils/convertToMP3'
 
@@ -24,7 +25,7 @@ const list = forgeController
   })
   .callback(async ({ pb, query: { page } }) =>
     pb.getList
-      .collection('moment_vault__entries')
+      .collection('momentVault__entries')
       .page(page)
       .perPage(10)
       .sort(['-created'])
@@ -48,7 +49,7 @@ export const createAudioEntry = async (
   const fileBuffer = fs.readFileSync(file.path)
 
   const entry = await pb.create
-    .collection('moment_vault__entries')
+    .collection('momentVault__entries')
     .data({
       type: 'audio',
       file: new File([fileBuffer], file.path.split('/').pop() || 'audio.mp3'),
@@ -63,7 +64,7 @@ export const createAudioEntry = async (
 
 export const createTextEntry = async (pb: PBService, content: string) =>
   pb.create
-    .collection('moment_vault__entries')
+    .collection('momentVault__entries')
     .data({
       type: 'text',
       content
@@ -81,7 +82,7 @@ export const createPhotosEntry = async (
   })
 
   const entry = await pb.create
-    .collection('moment_vault__entries')
+    .collection('momentVault__entries')
     .data({
       type: 'photos',
       file: allImages
@@ -174,11 +175,11 @@ const update = forgeController
     })
   })
   .existenceCheck('query', {
-    id: 'moment_vault__entries'
+    id: 'momentVault__entries'
   })
   .callback(({ pb, query: { id }, body: { content } }) =>
     pb.update
-      .collection('moment_vault__entries')
+      .collection('momentVault__entries')
       .id(id)
       .data({ content })
       .execute()
@@ -198,11 +199,11 @@ const toggleReviewed = forgeController
     })
   })
   .existenceCheck('query', {
-    id: 'moment_vault__entries'
+    id: 'momentVault__entries'
   })
   .callback(async ({ pb, query: { id } }) => {
     const entry = await pb.getOne
-      .collection('moment_vault__entries')
+      .collection('momentVault__entries')
       .id(id)
       .execute()
 
@@ -213,7 +214,7 @@ const toggleReviewed = forgeController
     }
 
     const updatedEntry = await pb.update
-      .collection('moment_vault__entries')
+      .collection('momentVault__entries')
       .id(id)
       .data({
         reviewed: !entry.reviewed
@@ -237,11 +238,11 @@ const remove = forgeController
     })
   })
   .existenceCheck('query', {
-    id: 'moment_vault__entries'
+    id: 'momentVault__entries'
   })
   .statusCode(204)
   .callback(({ pb, query: { id } }) =>
-    pb.delete.collection('moment_vault__entries').id(id).execute()
+    pb.delete.collection('momentVault__entries').id(id).execute()
   )
 
 export default forgeRouter({

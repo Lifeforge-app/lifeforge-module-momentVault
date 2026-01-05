@@ -1,10 +1,11 @@
+import fs from 'fs'
+import request from 'request'
+import z from 'zod'
+
 import { getAPIKey } from '@functions/database'
 import { fetchAI } from '@functions/external/ai'
 import { forgeController, forgeRouter } from '@functions/routes'
 import { ClientError } from '@functions/routes/utils/response'
-import fs from 'fs'
-import request from 'request'
-import z from 'zod'
 
 import { convertToMp3 } from '../utils/convertToMP3'
 import { getTranscription } from '../utils/transcription'
@@ -23,7 +24,7 @@ const transcribeExisted = forgeController
     })
   })
   .existenceCheck('query', {
-    id: 'moment_vault__entries'
+    id: 'momentVault__entries'
   })
   .callback(async ({ pb, query: { id } }) => {
     const apiKey = await getAPIKey('openai', pb)
@@ -33,7 +34,7 @@ const transcribeExisted = forgeController
     }
 
     const entry = await pb.getOne
-      .collection('moment_vault__entries')
+      .collection('momentVault__entries')
       .id(id)
       .execute()
 
@@ -73,7 +74,7 @@ const transcribeExisted = forgeController
       }
 
       await pb.update
-        .collection('moment_vault__entries')
+        .collection('momentVault__entries')
         .id(id)
         .data({
           transcription: response
@@ -156,11 +157,11 @@ const updateTranscription = forgeController
     })
   })
   .existenceCheck('query', {
-    id: 'moment_vault__entries'
+    id: 'momentVault__entries'
   })
   .callback(async ({ pb, query: { id }, body: { transcription } }) => {
     const entry = await pb.update
-      .collection('moment_vault__entries')
+      .collection('momentVault__entries')
       .id(id)
       .data({
         transcription
@@ -185,7 +186,7 @@ const cleanupTranscription = forgeController
     })
   })
   .existenceCheck('query', {
-    id: 'moment_vault__entries'
+    id: 'momentVault__entries'
   })
   .callback(async ({ pb, query: { id, newText } }) => {
     const apiKey = await getAPIKey('openai', pb)
@@ -198,7 +199,7 @@ const cleanupTranscription = forgeController
 
     if (!newText) {
       const entry = await pb.getOne
-        .collection('moment_vault__entries')
+        .collection('momentVault__entries')
         .id(id)
         .execute()
 
