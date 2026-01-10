@@ -1,21 +1,22 @@
 import type { MomentVaultEntry } from '@'
-import EditTranscriptionModal from '@/modals/EditTranscriptionModal'
-import { useAudioPlayer } from '@/providers/AudioPlayerProvider'
-import forgeAPI from '@/utils/forgeAPI'
 import { Icon } from '@iconify/react'
 import { useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import {
+  Card,
   ConfirmationModal,
   ContextMenu,
-  ContextMenuItem,
-  Card
+  ContextMenuItem
 } from 'lifeforge-ui'
 import { useModalStore } from 'lifeforge-ui'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import type { InferOutput } from 'shared'
+
+import EditTranscriptionModal from '@/modals/EditTranscriptionModal'
+import { useAudioPlayer } from '@/providers/AudioPlayerProvider'
+import forgeAPI from '@/utils/forgeAPI'
 
 import AudioPlayer from './components/AudioPlayer'
 
@@ -30,7 +31,7 @@ function AudioEntry({
   entry: MomentVaultEntry
   onDelete: () => void
 }) {
-  const open = useModalStore(state => state.open)
+  const { open } = useModalStore()
 
   const audioPlayerContext = useAudioPlayer()
 
@@ -103,7 +104,7 @@ function AudioEntry({
         <AudioPlayer entry={entry} />
       </div>
       {entry.transcription && (
-        <p className="text-bg-500 before:bg-custom-500 relative mt-6 whitespace-pre-wrap pl-4 before:absolute before:left-0 before:top-0 before:h-full before:w-1 before:rounded-full">
+        <p className="text-bg-500 before:bg-custom-500 relative mt-6 pl-4 whitespace-pre-wrap before:absolute before:top-0 before:left-0 before:h-full before:w-1 before:rounded-full">
           {entry.reviewed && (
             <div className="text-custom-500 mb-2 flex items-center gap-1 font-medium">
               <Icon icon="tabler:check" /> Reviewed

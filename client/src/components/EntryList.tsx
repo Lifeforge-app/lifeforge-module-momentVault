@@ -1,4 +1,3 @@
-import forgeAPI from '@/utils/forgeAPI'
 import { type UseQueryResult, useQueryClient } from '@tanstack/react-query'
 import {
   ConfirmationModal,
@@ -10,6 +9,8 @@ import { useModalStore } from 'lifeforge-ui'
 import { useCallback, useEffect } from 'react'
 import { toast } from 'react-toastify'
 import type { InferOutput } from 'shared'
+
+import forgeAPI from '@/utils/forgeAPI'
 
 import AudioEntry from './entries/AudioEntry'
 import PhotosEntry from './entries/PhotosEntry'
@@ -28,7 +29,7 @@ function EntryList({
 }) {
   const queryClient = useQueryClient()
 
-  const open = useModalStore(state => state.open)
+  const { open } = useModalStore()
 
   const handleDeleteEntry = useCallback(
     (entryId: string) => () => {

@@ -1,5 +1,3 @@
-import { AudioPlayerProvider } from '@/providers/AudioPlayerProvider'
-import forgeAPI from '@/utils/forgeAPI'
 import { useQuery } from '@tanstack/react-query'
 import {
   Button,
@@ -14,7 +12,11 @@ import { useTranslation } from 'react-i18next'
 import 'react-photo-album/styles.css'
 import type { InferOutput } from 'shared'
 
+import { AudioPlayerProvider } from '@/providers/AudioPlayerProvider'
+import forgeAPI from '@/utils/forgeAPI'
+
 import EntryList from './components/EntryList'
+import './index.css'
 import AddEntryModal from './modals/AddEntryModal'
 
 export type MomentVaultEntry = InferOutput<
@@ -22,7 +24,7 @@ export type MomentVaultEntry = InferOutput<
 >['items'][number]
 
 function MomentVault() {
-  const open = useModalStore(state => state.open)
+  const { open } = useModalStore()
 
   const { t } = useTranslation('apps.momentVault')
 

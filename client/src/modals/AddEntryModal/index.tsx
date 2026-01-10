@@ -42,7 +42,7 @@ function AddEntryModal({
   }
   onClose: () => void
 }) {
-  const open = useModalStore(state => state.open)
+  const { open } = useModalStore()
 
   const { t } = useTranslation('apps.momentVault')
 

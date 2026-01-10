@@ -1,11 +1,12 @@
 import type { MomentVaultEntry } from '@'
-import ModifyTextEntryModal from '@/modals/ModifyTextEntryModal'
 import { Icon } from '@iconify/react'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import { ContextMenu, ContextMenuItem, Card } from 'lifeforge-ui'
+import { Card, ContextMenu, ContextMenuItem } from 'lifeforge-ui'
 import { useModalStore } from 'lifeforge-ui'
 import { useCallback } from 'react'
+
+import ModifyTextEntryModal from '@/modals/ModifyTextEntryModal'
 
 dayjs.extend(relativeTime)
 
@@ -16,7 +17,7 @@ function TextEntry({
   entry: MomentVaultEntry
   onDelete: () => void
 }) {
-  const open = useModalStore(state => state.open)
+  const { open } = useModalStore()
 
   const handleUpdateEntry = useCallback(() => {
     open(ModifyTextEntryModal, {
