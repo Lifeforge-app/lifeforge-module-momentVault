@@ -43,21 +43,17 @@ function AudioEntry({
     setTranscriptionLoading(true)
 
     try {
-      const data = await forgeAPI.momentVault.transcribe.transcribeExisted
+      const data = await forgeAPI.transcribe.transcribeExisted
         .input({
           id: entry.id
         })
         .mutate({})
 
       queryClient.setQueryData(
-        forgeAPI.momentVault.entries.list.input({
+        forgeAPI.entries.list.input({
           page: currentPage.toString()
         }).key,
-        (
-          prev:
-            | InferOutput<typeof forgeAPI.momentVault.entries.list>
-            | undefined
-        ) => {
+        (prev: InferOutput<typeof forgeAPI.entries.list> | undefined) => {
           if (!prev) return prev
 
           const newData = prev.items.map(item => {
@@ -86,9 +82,7 @@ function AudioEntry({
 
   async function toggleReviewed() {
     try {
-      await forgeAPI.momentVault.entries.toggleReviewed
-        .input({ id: entry.id })
-        .mutate({})
+      await forgeAPI.entries.toggleReviewed.input({ id: entry.id }).mutate({})
 
       queryClient.invalidateQueries({
         queryKey: ['momentVault', 'entries']

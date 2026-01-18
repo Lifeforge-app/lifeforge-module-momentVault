@@ -20,7 +20,7 @@ import './index.css'
 import AddEntryModal from './modals/AddEntryModal'
 
 export type MomentVaultEntry = InferOutput<
-  typeof forgeAPI.momentVault.entries.list
+  typeof forgeAPI.entries.list
 >['items'][number]
 
 function MomentVault() {
@@ -31,7 +31,7 @@ function MomentVault() {
   const [page, setPage] = useState(1)
 
   const dataQuery = useQuery(
-    forgeAPI.momentVault.entries.list
+    forgeAPI.entries.list
       .input({
         page: page.toString()
       })

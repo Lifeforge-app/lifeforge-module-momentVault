@@ -1,7 +1,8 @@
-import forgeAPI from '@/utils/forgeAPI'
 import { Button, TextAreaInput } from 'lifeforge-ui'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
+
+import forgeAPI from '@/utils/forgeAPI'
 
 function TextType({ onSuccess }: { onSuccess: () => void }) {
   const [text, setText] = useState('')
@@ -12,7 +13,7 @@ function TextType({ onSuccess }: { onSuccess: () => void }) {
     setSubmitLoading(true)
 
     try {
-      await forgeAPI.momentVault.entries.create.mutate({
+      await forgeAPI.entries.create.mutate({
         type: 'text',
         content: text,
         files: undefined

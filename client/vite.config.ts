@@ -1,5 +1,5 @@
-import tailwindcss from '@tailwindcss/vite'
 import federation from '@originjs/vite-plugin-federation'
+import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 import dotenv from 'dotenv'
 import path from 'node:path'
@@ -9,16 +9,23 @@ import pkg from '../package.json'
 
 dotenv.config({ path: '../../../env/.env.local' })
 
-const apiHost = process.env.VITE_API_HOST
+const isDocker = process.env.DOCKER_BUILD === 'true'
+
+const apiHost = isDocker ? '/api' : process.env.VITE_API_HOST
 
 if (!apiHost) {
   throw new Error('VITE_API_HOST is not defined')
 }
 
+const outDir = isDocker ? 'dist-docker' : 'dist'
+
 const moduleName = pkg.name.replace('@lifeforge/', '')
 
 export default defineConfig({
   base: `${apiHost}/modules/${moduleName}/`,
+  define: {
+    'import.meta.env.VITE_API_HOST': JSON.stringify(apiHost)
+  },
   plugins: [
     react(),
     tailwindcss(),
@@ -50,19 +57,21 @@ export default defineConfig({
         '@tanstack/react-query': {
           generate: false
         }
-      }})
+      }
+    })
   ],
   resolve: {
     alias: [
       {
         find: '@server',
-        replacement: path.resolve(__dirname, '../../../server/src')
+        replacement: path.resolve(__dirname, '../server')
       },
       { find: /^@\/(.*)$/, replacement: path.resolve(__dirname, './src/$1') },
       { find: /^@$/, replacement: path.resolve(__dirname, './src/index') }
     ]
   },
   build: {
+    outDir,
     target: 'esnext',
     minify: true,
     modulePreload: false

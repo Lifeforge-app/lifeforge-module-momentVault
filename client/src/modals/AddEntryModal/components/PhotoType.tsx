@@ -1,10 +1,11 @@
-import forgeAPI from '@/utils/forgeAPI'
 import { Icon } from '@iconify/react'
 import { Button } from 'lifeforge-ui'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import PhotoAlbum from 'react-photo-album'
 import { toast } from 'react-toastify'
+
+import forgeAPI from '@/utils/forgeAPI'
 
 async function getNaturalHeightWidth(file: File) {
   return new Promise<{ height: number; width: number }>((resolve, reject) => {
@@ -42,7 +43,7 @@ function PhotoType({ onSuccess }: { onSuccess: () => void }) {
     setSubmitLoading(true)
 
     try {
-      await forgeAPI.momentVault.entries.create.mutate({
+      await forgeAPI.entries.create.mutate({
         type: 'photos',
         files: photos.map(photo => photo.file)
       })

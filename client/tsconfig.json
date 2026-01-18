@@ -34,17 +34,13 @@
         "./src/*"
       ],
       "@server/*": [
-        "../../../server/src/*"
+        "../server/*"
       ]
     }
   },
   "include": [
     "./src/**/*",
-    "./manifest.ts"
-  ],
-  "references": [
-    {
-      "path": "../../../server/tsconfig.json"
-    }
+    "./manifest.ts",
+    "../server/**/*"
   ]
 }

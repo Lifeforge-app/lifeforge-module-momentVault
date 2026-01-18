@@ -1,9 +1,10 @@
-import forgeAPI from '@/utils/forgeAPI'
 import { useQueryClient } from '@tanstack/react-query'
 import { Button, Widget } from 'lifeforge-ui'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import { type WidgetConfig, useDivSize } from 'shared'
+
+import forgeAPI from '@/utils/forgeAPI'
 
 type RecordingState = 'idle' | 'recording' | 'submitting'
 
@@ -71,7 +72,7 @@ function QuickAudioCapture() {
         )
 
         try {
-          await forgeAPI.momentVault.entries.create.mutate({
+          await forgeAPI.entries.create.mutate({
             type: 'audio',
             files: [file]
           })

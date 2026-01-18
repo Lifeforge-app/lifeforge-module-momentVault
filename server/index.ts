@@ -1,9 +1,9 @@
-import { forgeRouter } from '@functions/routes'
+import { forgeRouter } from '@lifeforge/server-utils'
 
-import entriesRouter from './routes/entries'
-import transcriptionRouter from './routes/transcription'
+import * as entriesRoutes from './routes/entries'
+import * as transcriptionRoutes from './routes/transcription'
 
 export default forgeRouter({
-  entries: entriesRouter,
-  transcribe: transcriptionRouter
+  entries: entriesRoutes,
+  transcribe: transcriptionRoutes
 })

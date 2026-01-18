@@ -1,9 +1,4 @@
 import type { MomentVaultEntry } from '@'
-import {
-  type AudioPlayerContextType,
-  useAudioPlayer
-} from '@/providers/AudioPlayerProvider'
-import forgeAPI from '@/utils/forgeAPI'
 import { Icon } from '@iconify/react'
 import WavesurferPlayer from '@wavesurfer/react'
 import dayjs from 'dayjs'
@@ -11,6 +6,12 @@ import { Button, useModalStore } from 'lifeforge-ui'
 import { memo, useCallback, useEffect, useId, useMemo, useState } from 'react'
 import { usePersonalization } from 'shared'
 import type WaveSurfer from 'wavesurfer.js'
+
+import {
+  type AudioPlayerContextType,
+  useAudioPlayer
+} from '@/providers/AudioPlayerProvider'
+import forgeAPI from '@/utils/forgeAPI'
 
 // Separate component for timer display to prevent parent rerenders
 const TimeDisplay = memo(
@@ -31,7 +32,7 @@ function AudioPlayer({
   entry: MomentVaultEntry
   audioPlayerContext?: AudioPlayerContextType
 }) {
-  const stack = useModalStore(state => state.stack)
+  const { stack } = useModalStore()
 
   const instanceId = useId()
 
@@ -68,11 +69,11 @@ function AudioPlayer({
 
   const mediaUrl = useMemo(
     () =>
-      forgeAPI.media.input({
+      forgeAPI.getMedia({
         collectionId: entry.collectionId,
         recordId: entry.id,
         fieldId: entry.file?.[0]
-      }).endpoint,
+      }),
     [entry.collectionId, entry.id, entry.file]
   )
 

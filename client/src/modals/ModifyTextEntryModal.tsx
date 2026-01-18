@@ -1,8 +1,9 @@
-import forgeAPI from '@/utils/forgeAPI'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { FormModal, defineForm } from 'lifeforge-ui'
 import { toast } from 'react-toastify'
 import type { InferInput } from 'shared'
+
+import forgeAPI from '@/utils/forgeAPI'
 
 import type { MomentVaultEntry } from '..'
 
@@ -18,7 +19,7 @@ function ModifyTextEntryModal({
   const queryClient = useQueryClient()
 
   const mutation = useMutation(
-    forgeAPI.momentVault.entries.update
+    forgeAPI.entries.update
       .input({
         id: initialData?.id || ''
       })
@@ -36,7 +37,7 @@ function ModifyTextEntryModal({
   )
 
   const { formProps } = defineForm<
-    InferInput<typeof forgeAPI.momentVault.entries.update>['body']
+    InferInput<typeof forgeAPI.entries.update>['body']
   >({
     title: 'Update Entry',
     namespace: 'apps.momentVault',

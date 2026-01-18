@@ -21,9 +21,7 @@ function EntryList({
   page,
   setPage
 }: {
-  dataQuery: UseQueryResult<
-    InferOutput<typeof forgeAPI.momentVault.entries.list>
-  >
+  dataQuery: UseQueryResult<InferOutput<typeof forgeAPI.entries.list>>
   page: number
   setPage: React.Dispatch<React.SetStateAction<number>>
 }) {
@@ -39,7 +37,7 @@ function EntryList({
         confirmationButton: 'delete',
         onConfirm: async () => {
           try {
-            await forgeAPI.momentVault.entries.remove
+            await forgeAPI.entries.remove
               .input({
                 id: entryId
               })

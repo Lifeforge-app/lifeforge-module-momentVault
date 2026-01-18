@@ -1,6 +1,7 @@
+import { cleanSchemas } from '@lifeforge/server-utils'
 import z from 'zod'
 
-const momentVaultSchemas = {
+export const schemas = {
   entries: {
     schema: z.object({
       type: z.enum(['text', 'audio', 'video', 'photos', '']),
@@ -115,4 +116,4 @@ const momentVaultSchemas = {
   }
 }
 
-export default momentVaultSchemas
+export default cleanSchemas(schemas)

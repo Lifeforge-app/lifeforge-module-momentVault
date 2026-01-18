@@ -1,12 +1,13 @@
 import type { MomentVaultEntry } from '@'
-import forgeAPI from '@/utils/forgeAPI'
 import { Icon } from '@iconify/react'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
-import { ContextMenu, ContextMenuItem, Card } from 'lifeforge-ui'
+import { Card, ContextMenu, ContextMenuItem } from 'lifeforge-ui'
 import { useEffect, useState } from 'react'
 import Zoom from 'react-medium-image-zoom'
 import PhotoAlbum from 'react-photo-album'
+
+import forgeAPI from '@/utils/forgeAPI'
 
 dayjs.extend(relativeTime)
 
@@ -43,11 +44,11 @@ function PhotosEntry({
     const fetchPhotos = async () => {
       const photos = await Promise.all(
         entry.file!.map(async file => {
-          const fileUrl = forgeAPI.media.input({
+          const fileUrl = forgeAPI.getMedia({
             collectionId: entry.collectionId,
             recordId: entry.id,
             fieldId: file
-          }).endpoint
+          })
 
           const { height, width } = await getNaturalHeightWidth(fileUrl)
 

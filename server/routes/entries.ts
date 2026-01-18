@@ -1,20 +1,14 @@
+import { ClientError, type IPBService } from '@lifeforge/server-utils'
 import fs from 'fs'
 import z from 'zod'
 
-import { PBService } from '@functions/database'
-import { forgeController, forgeRouter } from '@functions/routes'
-import { ClientError } from '@functions/routes/utils/response'
-
+import forge from '../forge'
+import schema from '../schema'
 import { convertToMp3 } from '../utils/convertToMP3'
 
-const list = forgeController
+export const list = forge
   .query()
-  .description({
-    en: 'Get paginated list of moment vault entries',
-    ms: 'Dapatkan senarai halaman entri peti saat',
-    'zh-CN': '获取分页的回忆金库条目列表',
-    'zh-TW': '獲取分頁的回憶金庫條目列表'
-  })
+  .description('Get paginated list of moment vault entries')
   .input({
     query: z.object({
       page: z
@@ -25,20 +19,20 @@ const list = forgeController
   })
   .callback(async ({ pb, query: { page } }) =>
     pb.getList
-      .collection('momentVault__entries')
+      .collection('entries')
       .page(page)
       .perPage(10)
       .sort(['-created'])
       .execute()
   )
 
-export const createAudioEntry = async (
-  pb: PBService,
+const createAudioEntry = async (
+  pb: IPBService<typeof schema>,
   {
     file,
     transcription
   }: {
-    file: Express.Multer.File
+    file: any
     transcription?: string
   }
 ) => {
@@ -49,7 +43,7 @@ export const createAudioEntry = async (
   const fileBuffer = fs.readFileSync(file.path)
 
   const entry = await pb.create
-    .collection('momentVault__entries')
+    .collection('entries')
     .data({
       type: 'audio',
       file: new File([fileBuffer], file.path.split('/').pop() || 'audio.mp3'),
@@ -62,18 +56,21 @@ export const createAudioEntry = async (
   return entry
 }
 
-export const createTextEntry = async (pb: PBService, content: string) =>
+const createTextEntry = async (
+  pb: IPBService<typeof schema>,
+  content: string
+) =>
   pb.create
-    .collection('momentVault__entries')
+    .collection('entries')
     .data({
       type: 'text',
       content
     })
     .execute()
 
-export const createPhotosEntry = async (
-  pb: PBService,
-  files: Express.Multer.File[]
+const createPhotosEntry = async (
+  pb: IPBService<typeof schema>,
+  files: any[]
 ) => {
   const allImages = files.map(file => {
     const fileBuffer = fs.readFileSync(file.path)
@@ -82,7 +79,7 @@ export const createPhotosEntry = async (
   })
 
   const entry = await pb.create
-    .collection('momentVault__entries')
+    .collection('entries')
     .data({
       type: 'photos',
       file: allImages
@@ -92,14 +89,9 @@ export const createPhotosEntry = async (
   return entry
 }
 
-const create = forgeController
+export const create = forge
   .mutation()
-  .description({
-    en: 'Create a new moment vault entry',
-    ms: 'Cipta entri peti saat baharu',
-    'zh-CN': '创建新的回忆金库条目',
-    'zh-TW': '創建新的回憶金庫條目'
-  })
+  .description('Create a new moment vault entry')
   .input({
     body: z.object({
       type: z.enum(['text', 'audio', 'photos']),
@@ -158,14 +150,9 @@ const create = forgeController
     }
   )
 
-const update = forgeController
+export const update = forge
   .mutation()
-  .description({
-    en: 'Update content of a moment vault entry',
-    ms: 'Kemas kini kandungan entri peti saat',
-    'zh-CN': '更新回忆金库条目的内容',
-    'zh-TW': '更新回憶金庫條目的內容'
-  })
+  .description('Update content of a moment vault entry')
   .input({
     query: z.object({
       id: z.string()
@@ -175,37 +162,25 @@ const update = forgeController
     })
   })
   .existenceCheck('query', {
-    id: 'momentVault__entries'
+    id: 'entries'
   })
   .callback(({ pb, query: { id }, body: { content } }) =>
-    pb.update
-      .collection('momentVault__entries')
-      .id(id)
-      .data({ content })
-      .execute()
+    pb.update.collection('entries').id(id).data({ content }).execute()
   )
 
-const toggleReviewed = forgeController
+export const toggleReviewed = forge
   .mutation()
-  .description({
-    en: 'Toggle reviewed status of an audio entry',
-    ms: 'Togol status semakan entri audio',
-    'zh-CN': '切换音频条目的审阅状态',
-    'zh-TW': '切換音訊條目的審閱狀態'
-  })
+  .description('Toggle reviewed status of an audio entry')
   .input({
     query: z.object({
       id: z.string()
     })
   })
   .existenceCheck('query', {
-    id: 'momentVault__entries'
+    id: 'entries'
   })
   .callback(async ({ pb, query: { id } }) => {
-    const entry = await pb.getOne
-      .collection('momentVault__entries')
-      .id(id)
-      .execute()
+    const entry = await pb.getOne.collection('entries').id(id).execute()
 
     if (entry.type !== 'audio') {
       throw new ClientError(
@@ -214,7 +189,7 @@ const toggleReviewed = forgeController
     }
 
     const updatedEntry = await pb.update
-      .collection('momentVault__entries')
+      .collection('entries')
       .id(id)
       .data({
         reviewed: !entry.reviewed
@@ -224,31 +199,18 @@ const toggleReviewed = forgeController
     return updatedEntry
   })
 
-const remove = forgeController
+export const remove = forge
   .mutation()
-  .description({
-    en: 'Delete a moment vault entry',
-    ms: 'Padam entri peti saat',
-    'zh-CN': '删除回忆金库条目',
-    'zh-TW': '刪除回憶金庫條目'
-  })
+  .description('Delete a moment vault entry')
   .input({
     query: z.object({
       id: z.string()
     })
   })
   .existenceCheck('query', {
-    id: 'momentVault__entries'
+    id: 'entries'
   })
   .statusCode(204)
   .callback(({ pb, query: { id } }) =>
-    pb.delete.collection('momentVault__entries').id(id).execute()
+    pb.delete.collection('entries').id(id).execute()
   )
-
-export default forgeRouter({
-  list,
-  create,
-  update,
-  toggleReviewed,
-  remove
-})

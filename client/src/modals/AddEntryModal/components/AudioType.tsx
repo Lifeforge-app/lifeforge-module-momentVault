@@ -1,4 +1,3 @@
-import forgeAPI from '@/utils/forgeAPI'
 import { Icon } from '@iconify/react'
 import WavesurferPlayer from '@wavesurfer/react'
 import dayjs from 'dayjs'
@@ -8,6 +7,8 @@ import { useTranslation } from 'react-i18next'
 import { toast } from 'react-toastify'
 import { usePersonalization } from 'shared'
 import WaveSurfer from 'wavesurfer.js'
+
+import forgeAPI from '@/utils/forgeAPI'
 
 function AudioType({
   onSuccess,
@@ -131,7 +132,7 @@ function AudioType({
     body.append('file', file)
 
     try {
-      const data = await forgeAPI.momentVault.transcribe.transcribeNew.mutate({
+      const data = await forgeAPI.transcribe.transcribeNew.mutate({
         file
       })
 
@@ -155,7 +156,7 @@ function AudioType({
     )
 
     try {
-      await forgeAPI.momentVault.entries.create.mutate({
+      await forgeAPI.entries.create.mutate({
         type: 'audio',
         files: [file],
         transcription: transcription ?? ''

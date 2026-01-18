@@ -1,153 +1,148 @@
+import { ClientError } from '@lifeforge/server-utils'
 import fs from 'fs'
 import request from 'request'
 import z from 'zod'
 
-import { getAPIKey } from '@functions/database'
-import { fetchAI } from '@functions/external/ai'
-import { forgeController, forgeRouter } from '@functions/routes'
-import { ClientError } from '@functions/routes/utils/response'
-
+import forge from '../forge'
 import { convertToMp3 } from '../utils/convertToMP3'
 import { getTranscription } from '../utils/transcription'
 
-const transcribeExisted = forgeController
+export const transcribeExisted = forge
   .mutation()
-  .description({
-    en: 'Transcribe an existing audio entry',
-    ms: 'Transkripsi entri audio sedia ada',
-    'zh-CN': '转录现有音频条目',
-    'zh-TW': '轉錄現有音訊條目'
-  })
+  .description('Transcribe an existing audio entry')
   .input({
     query: z.object({
       id: z.string()
     })
   })
   .existenceCheck('query', {
-    id: 'momentVault__entries'
+    id: 'entries'
   })
-  .callback(async ({ pb, query: { id } }) => {
-    const apiKey = await getAPIKey('openai', pb)
+  .callback(
+    async ({
+      pb,
+      query: { id },
+      core: {
+        api: { getAPIKey }
+      }
+    }) => {
+      const apiKey = await getAPIKey('openai', pb)
 
-    if (!apiKey) {
-      throw new ClientError('API key not found')
-    }
+      if (!apiKey) {
+        throw new ClientError('API key not found')
+      }
 
-    const entry = await pb.getOne
-      .collection('momentVault__entries')
-      .id(id)
-      .execute()
+      const entry = await pb.getOne.collection('entries').id(id).execute()
 
-    if (!entry.file) {
-      throw new ClientError('No audio file found in entry')
-    }
+      if (!entry.file) {
+        throw new ClientError('No audio file found in entry')
+      }
 
-    const fileURL = pb.instance.files.getURL(entry, entry.file[0])
+      const fileURL = pb.instance.files.getURL(entry, entry.file[0])
 
-    try {
-      let filePath = `medium/${fileURL.split('/').pop()}`
+      try {
+        let filePath = `medium/${fileURL.split('/').pop()}`
 
-      const fileStream = fs.createWriteStream(filePath)
+        const fileStream = fs.createWriteStream(filePath)
 
-      request(fileURL).pipe(fileStream)
+        request(fileURL).pipe(fileStream)
 
-      await new Promise(resolve => {
-        fileStream.on('finish', () => {
-          resolve(null)
+        await new Promise(resolve => {
+          fileStream.on('finish', () => {
+            resolve(null)
+          })
         })
-      })
 
-      if (!filePath.endsWith('.mp3')) {
-        const mp3Path = await convertToMp3(filePath)
+        if (!filePath.endsWith('.mp3')) {
+          const mp3Path = await convertToMp3(filePath)
+
+          if (fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath)
+          }
+
+          filePath = mp3Path
+        }
+
+        const response = await getTranscription(filePath, apiKey)
+
+        if (!response) {
+          throw new Error('Transcription failed')
+        }
+
+        await pb.update
+          .collection('entries')
+          .id(id)
+          .data({
+            transcription: response
+          })
+          .execute()
 
         if (fs.existsSync(filePath)) {
           fs.unlinkSync(filePath)
         }
 
-        filePath = mp3Path
-      }
+        return response
+      } catch (err) {
+        console.error('Error during transcription:', err)
+        throw new Error('Failed to transcribe audio file')
+      } finally {
+        const filePath = `medium/${fileURL.split('/').pop()}`
 
-      const response = await getTranscription(filePath, apiKey)
-
-      if (!response) {
-        throw new Error('Transcription failed')
-      }
-
-      await pb.update
-        .collection('momentVault__entries')
-        .id(id)
-        .data({
-          transcription: response
-        })
-        .execute()
-
-      if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath)
-      }
-
-      return response
-    } catch (err) {
-      console.error('Error during transcription:', err)
-      throw new Error('Failed to transcribe audio file')
-    } finally {
-      const filePath = `medium/${fileURL.split('/').pop()}`
-
-      if (fs.existsSync(filePath)) {
-        fs.unlinkSync(filePath)
+        if (fs.existsSync(filePath)) {
+          fs.unlinkSync(filePath)
+        }
       }
     }
-  })
+  )
 
-const transcribeNew = forgeController
+export const transcribeNew = forge
   .mutation()
-  .description({
-    en: 'Transcribe a new audio file',
-    ms: 'Transkripsi fail audio baharu',
-    'zh-CN': '转录新音频文件',
-    'zh-TW': '轉錄新音訊檔案'
-  })
+  .description('Transcribe a new audio file')
   .input({})
   .media({
     file: {
       optional: false
     }
   })
-  .callback(async ({ pb, media: { file } }) => {
-    if (!file || typeof file === 'string') {
-      throw new ClientError('No file uploaded')
+  .callback(
+    async ({
+      pb,
+      media: { file },
+      core: {
+        api: { getAPIKey }
+      }
+    }) => {
+      if (!file || typeof file === 'string') {
+        throw new ClientError('No file uploaded')
+      }
+
+      if (file.mimetype !== 'audio/mp3') {
+        file.path = await convertToMp3(file.path)
+      }
+
+      const apiKey = await getAPIKey('openai', pb)
+
+      if (!apiKey) {
+        throw new ClientError('API key not found')
+      }
+
+      const response = await getTranscription(file.path, apiKey)
+
+      if (!response) {
+        throw new Error('Transcription failed')
+      }
+
+      if (fs.existsSync(file.path)) {
+        fs.unlinkSync(file.path)
+      }
+
+      return response
     }
+  )
 
-    if (file.mimetype !== 'audio/mp3') {
-      file.path = await convertToMp3(file.path)
-    }
-
-    const apiKey = await getAPIKey('openai', pb)
-
-    if (!apiKey) {
-      throw new ClientError('API key not found')
-    }
-
-    const response = await getTranscription(file.path, apiKey)
-
-    if (!response) {
-      throw new Error('Transcription failed')
-    }
-
-    if (fs.existsSync(file.path)) {
-      fs.unlinkSync(file.path)
-    }
-
-    return response
-  })
-
-const updateTranscription = forgeController
+export const updateTranscription = forge
   .mutation()
-  .description({
-    en: 'Update transcription of an audio entry',
-    ms: 'Kemas kini transkripsi entri audio',
-    'zh-CN': '更新音频条目的转录',
-    'zh-TW': '更新音訊條目的轉錄'
-  })
+  .description('Update transcription of an audio entry')
   .input({
     query: z.object({
       id: z.string()
@@ -157,11 +152,11 @@ const updateTranscription = forgeController
     })
   })
   .existenceCheck('query', {
-    id: 'momentVault__entries'
+    id: 'entries'
   })
   .callback(async ({ pb, query: { id }, body: { transcription } }) => {
     const entry = await pb.update
-      .collection('momentVault__entries')
+      .collection('entries')
       .id(id)
       .data({
         transcription
@@ -171,14 +166,9 @@ const updateTranscription = forgeController
     return entry
   })
 
-const cleanupTranscription = forgeController
+export const cleanupTranscription = forge
   .mutation()
-  .description({
-    en: 'Clean up and improve transcription text',
-    ms: 'Bersihkan dan tingkatkan teks transkripsi',
-    'zh-CN': '清理并改进转录文本',
-    'zh-TW': '清理並改進轉錄文本'
-  })
+  .description('Clean up and improve transcription text')
   .input({
     query: z.object({
       id: z.string(),
@@ -186,62 +176,60 @@ const cleanupTranscription = forgeController
     })
   })
   .existenceCheck('query', {
-    id: 'momentVault__entries'
+    id: 'entries'
   })
-  .callback(async ({ pb, query: { id, newText } }) => {
-    const apiKey = await getAPIKey('openai', pb)
+  .callback(
+    async ({
+      pb,
+      query: { id, newText },
+      core: {
+        api: { getAPIKey, fetchAI }
+      }
+    }) => {
+      const apiKey = await getAPIKey('openai', pb)
 
-    if (!apiKey) {
-      throw new ClientError('API key not found')
-    }
-
-    let textToCleanUp: string
-
-    if (!newText) {
-      const entry = await pb.getOne
-        .collection('momentVault__entries')
-        .id(id)
-        .execute()
-
-      if (!entry.transcription) {
-        throw new ClientError('No transcription data to clean up')
+      if (!apiKey) {
+        throw new ClientError('API key not found')
       }
 
-      textToCleanUp = entry.transcription
-    } else {
-      textToCleanUp = newText
-    }
+      let textToCleanUp: string
 
-    const response = await fetchAI({
-      provider: 'openai',
-      model: 'gpt-4o-mini',
-      pb,
-      messages: [
-        {
-          role: 'system',
-          content:
-            'You are an expert text cleaner. Your task is to clean up the provided transcription text by adding appropriate punctuation, fixing grammatical errors, and improving overall readability. Ensure the cleaned transcription maintains the original wordings and meaning while enhancing its clarity and flow.'
-        },
-        {
-          role: 'user',
-          content: `Please clean up the following transcription:\n\n${textToCleanUp}`
+      if (!newText) {
+        const entry = await pb.getOne.collection('entries').id(id).execute()
+
+        if (!entry.transcription) {
+          throw new ClientError('No transcription data to clean up')
         }
-      ],
-      structure: z.object({
-        cleanedTranscription: z.string()
+
+        textToCleanUp = entry.transcription
+      } else {
+        textToCleanUp = newText
+      }
+
+      const response = await fetchAI({
+        provider: 'openai',
+        model: 'gpt-4o-mini',
+        pb,
+        messages: [
+          {
+            role: 'system',
+            content:
+              'You are an expert text cleaner. Your task is to clean up the provided transcription text by adding appropriate punctuation, fixing grammatical errors, and improving overall readability. Ensure the cleaned transcription maintains the original wordings and meaning while enhancing its clarity and flow.'
+          },
+          {
+            role: 'user',
+            content: `Please clean up the following transcription:\n\n${textToCleanUp}`
+          }
+        ],
+        structure: z.object({
+          cleanedTranscription: z.string()
+        })
       })
-    })
 
-    if (!response || !response.cleanedTranscription) {
-      throw new Error('Failed to clean up transcription')
+      if (!response || !response.cleanedTranscription) {
+        throw new Error('Failed to clean up transcription')
+      }
+
+      return response.cleanedTranscription
     }
-
-    return response.cleanedTranscription
-  })
-
-export default forgeRouter({
-  transcribeExisted,
-  transcribeNew,
-  updateTranscription,
-  cleanupTranscription
-})
+  )

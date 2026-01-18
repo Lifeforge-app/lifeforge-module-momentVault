@@ -10,46 +10,31 @@
   "description": "Capture every moment, cherish your life, revisit anytime.",
   "scripts": {
     "types": "cd client && bun tsc",
-    "build:client": "cd client && bun run vite build"
+    "build:client": "cd client && bun run vite build",
+    "build:server": "bun build ./server/index.ts --outdir ./server/dist --target bun --external @lifeforge/server-utils --external zod"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.9",
-    "@iconify/react": "^6.0.2",
     "@wavesurfer/react": "^1.0.11",
-    "dayjs": "^1.11.18",
     "fluent-ffmpeg": "^2.1.3",
     "groq-sdk": "^0.33.0",
     "openai": "^6.9.0",
     "react-medium-image-zoom": "^5.4.0",
     "react-photo-album": "^3.1.0",
-    "react-toastify": "^11.0.5",
     "request": "^2.88.2",
-    "wavesurfer.js": "^7.11.0",
-    "zod": "^4.3.5"
+    "wavesurfer.js": "^7.11.0"
   },
   "devDependencies": {
-    "@originjs/vite-plugin-federation": "^1.4.1",
-    "@tailwindcss/vite": "^4.1.18",
     "@types/fluent-ffmpeg": "^2.1.27",
-    "@types/react": "^19.2.0",
-    "@types/react-dom": "^19.2.1",
-    "@types/request": "^2.48.13",
-    "@vitejs/plugin-react": "^4.4.1",
-    "dotenv": "^17.2.3",
-    "tailwindcss": "^4.1.18",
-    "vite": "^7.1.9"
+    "@types/request": "^2.48.13"
   },
   "lifeforge": {
     "icon": "tabler:history",
     "category": "Lifestyle"
   },
   "peerDependencies": {
-    "@tanstack/react-query": "^5.90.2",
-    "i18next": "^25.7.4",
+    "@lifeforge/server-utils": "workspace:*",
     "lifeforge-ui": "workspace:*",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "react-i18next": "^16.5.1",
     "shared": "workspace:*"
   }
 }

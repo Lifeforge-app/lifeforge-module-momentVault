@@ -1,11 +1,12 @@
 import type { MomentVaultEntry } from '@'
-import AudioPlayer from '@/components/entries/AudioEntry/components/AudioPlayer'
-import type { AudioPlayerContextType } from '@/providers/AudioPlayerProvider'
-import forgeAPI from '@/utils/forgeAPI'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { FormModal, defineForm } from 'lifeforge-ui'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
+
+import AudioPlayer from '@/components/entries/AudioEntry/components/AudioPlayer'
+import type { AudioPlayerContextType } from '@/providers/AudioPlayerProvider'
+import forgeAPI from '@/utils/forgeAPI'
 
 function EditTranscriptionModal({
   onClose,
@@ -22,7 +23,7 @@ function EditTranscriptionModal({
   const [cleanupLoading, setCleanupLoading] = useState(false)
 
   const mutation = useMutation(
-    forgeAPI.momentVault.transcribe.updateTranscription
+    forgeAPI.transcribe.updateTranscription
       .input({ id: entry.id })
       .mutationOptions({
         onSuccess: () => {
@@ -59,13 +60,12 @@ function EditTranscriptionModal({
           const shouldUseNewText =
             data.transcription.trim() !== entry.transcription?.trim()
 
-          const response =
-            await forgeAPI.momentVault.transcribe.cleanupTranscription
-              .input({
-                id: entry.id,
-                newText: shouldUseNewText ? data.transcription : undefined
-              })
-              .mutate({})
+          const response = await forgeAPI.transcribe.cleanupTranscription
+            .input({
+              id: entry.id,
+              newText: shouldUseNewText ? data.transcription : undefined
+            })
+            .mutate({})
 
           setData({ transcription: response })
           setCleanupLoading(false)
