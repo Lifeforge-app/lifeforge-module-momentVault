@@ -8,11 +8,11 @@ import {
   ConfirmationModal,
   ContextMenu,
   ContextMenuItem
-} from 'lifeforge-ui'
-import { useModalStore } from 'lifeforge-ui'
+} from '@lifeforge/ui'
+import { useModalStore } from '@lifeforge/ui'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
-import type { InferOutput } from 'shared'
+import type { InferOutput } from '@lifeforge/shared'
 
 import EditTranscriptionModal from '@/modals/EditTranscriptionModal'
 import { useAudioPlayer } from '@/providers/AudioPlayerProvider'

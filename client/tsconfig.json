@@ -40,7 +40,6 @@
   },
   "include": [
     "./src/**/*",
-    "./manifest.ts",
-    "../server/**/*"
+    "./manifest.ts"
   ]
 }

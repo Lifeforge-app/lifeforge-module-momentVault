@@ -1,8 +1,8 @@
 import { useQueryClient } from '@tanstack/react-query'
-import { Button, Widget } from 'lifeforge-ui'
+import { Button, Widget } from '@lifeforge/ui'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
-import { type WidgetConfig, useDivSize } from 'shared'
+import { type WidgetConfig, useDivSize } from '@lifeforge/shared'
 
 import forgeAPI from '@/utils/forgeAPI'
 

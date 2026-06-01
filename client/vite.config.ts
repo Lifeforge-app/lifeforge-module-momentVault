@@ -42,10 +42,10 @@ export default defineConfig({
         'react-dom': {
           generate: false
         },
-        shared: {
+        "@lifeforge/shared": {
           generate: false
         },
-        'lifeforge-ui': {
+        '@lifeforge/ui': {
           generate: false
         },
         'react-i18next': {

@@ -1,5 +1,6 @@
 import { type APIRoutes } from '@server/routes.types'
-import { createForgeProxy } from 'shared'
+
+import { createForgeProxy } from '@lifeforge/shared'
 
 if (!import.meta.env.VITE_API_HOST) {
   throw new Error('VITE_API_HOST is not defined')

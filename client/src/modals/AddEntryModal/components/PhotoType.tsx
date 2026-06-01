@@ -1,9 +1,10 @@
 import { Icon } from '@iconify/react'
-import { Button } from 'lifeforge-ui'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import PhotoAlbum from 'react-photo-album'
 import { toast } from 'react-toastify'
+
+import { Button } from '@lifeforge/ui'
 
 import forgeAPI from '@/utils/forgeAPI'
 

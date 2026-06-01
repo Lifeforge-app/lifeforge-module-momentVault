@@ -5,12 +5,12 @@ import {
   ContextMenuItem,
   FAB,
   ModuleHeader
-} from 'lifeforge-ui'
-import { useModalStore } from 'lifeforge-ui'
+} from '@lifeforge/ui'
+import { useModalStore } from '@lifeforge/ui'
 import { useCallback, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import 'react-photo-album/styles.css'
-import type { InferOutput } from 'shared'
+import type { InferOutput } from '@lifeforge/shared'
 
 import { AudioPlayerProvider } from '@/providers/AudioPlayerProvider'
 import forgeAPI from '@/utils/forgeAPI'

@@ -4,11 +4,11 @@ import {
   EmptyStateScreen,
   Pagination,
   WithQuery
-} from 'lifeforge-ui'
-import { useModalStore } from 'lifeforge-ui'
+} from '@lifeforge/ui'
+import { useModalStore } from '@lifeforge/ui'
 import { useCallback, useEffect } from 'react'
 import { toast } from 'react-toastify'
-import type { InferOutput } from 'shared'
+import type { InferOutput } from '@lifeforge/shared'
 
 import forgeAPI from '@/utils/forgeAPI'
 

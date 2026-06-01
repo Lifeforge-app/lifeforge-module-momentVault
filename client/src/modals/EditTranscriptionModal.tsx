@@ -1,8 +1,9 @@
 import type { MomentVaultEntry } from '@'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { FormModal, defineForm } from 'lifeforge-ui'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
+
+import { FormModal, defineForm } from '@lifeforge/ui'
 
 import AudioPlayer from '@/components/entries/AudioEntry/components/AudioPlayer'
 import type { AudioPlayerContextType } from '@/providers/AudioPlayerProvider'

@@ -2,9 +2,9 @@ import type { MomentVaultEntry } from '@'
 import { Icon } from '@iconify/react'
 import WavesurferPlayer from '@wavesurfer/react'
 import dayjs from 'dayjs'
-import { Button, useModalStore } from 'lifeforge-ui'
+import { Button, useModalStore } from '@lifeforge/ui'
 import { memo, useCallback, useEffect, useId, useMemo, useState } from 'react'
-import { usePersonalization } from 'shared'
+import { usePersonalization } from '@lifeforge/shared'
 import type WaveSurfer from 'wavesurfer.js'
 
 import {
