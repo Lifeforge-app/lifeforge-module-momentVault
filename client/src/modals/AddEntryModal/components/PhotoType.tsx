@@ -6,7 +6,7 @@ import { toast } from 'react-toastify'
 
 import { Button } from '@lifeforge/ui'
 
-import forgeAPI from '@/utils/forgeAPI'
+import { forgeAPI } from '@/manifest'
 
 async function getNaturalHeightWidth(file: File) {
   return new Promise<{ height: number; width: number }>((resolve, reject) => {

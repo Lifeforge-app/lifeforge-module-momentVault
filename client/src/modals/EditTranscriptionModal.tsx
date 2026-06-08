@@ -7,7 +7,7 @@ import { FormModal, defineForm } from '@lifeforge/ui'
 
 import AudioPlayer from '@/components/entries/AudioEntry/components/AudioPlayer'
 import type { AudioPlayerContextType } from '@/providers/AudioPlayerProvider'
-import forgeAPI from '@/utils/forgeAPI'
+import { forgeAPI } from '@/manifest'
 
 function EditTranscriptionModal({
   onClose,

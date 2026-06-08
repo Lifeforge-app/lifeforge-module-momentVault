@@ -3,7 +3,7 @@ import { toast } from 'react-toastify'
 
 import { Button, TextAreaInput } from '@lifeforge/ui'
 
-import forgeAPI from '@/utils/forgeAPI'
+import { forgeAPI } from '@/manifest'
 
 function TextType({ onSuccess }: { onSuccess: () => void }) {
   const [text, setText] = useState('')

@@ -8,7 +8,7 @@ import { toast } from 'react-toastify'
 import { usePersonalization } from '@lifeforge/shared'
 import WaveSurfer from 'wavesurfer.js'
 
-import forgeAPI from '@/utils/forgeAPI'
+import { forgeAPI } from '@/manifest'
 
 function AudioType({
   onSuccess,

@@ -1,22 +1,28 @@
-import { ClientError } from '@lifeforge/server-utils'
 import fs from 'fs'
 import request from 'request'
 import z from 'zod'
 
 import forge from '../forge'
+import momentVaultSchemas from '../schema'
 import { convertToMp3 } from '../utils/convertToMP3'
 import { getTranscription } from '../utils/transcription'
 
 export const transcribeExisted = forge
-  .mutation()
-  .description('Transcribe an existing audio entry')
-  .input({
-    query: z.object({
-      id: z.string()
-    })
-  })
-  .existenceCheck('query', {
-    id: 'entries'
+  .mutation({
+    description: 'Transcribe an existing audio entry',
+    input: {
+      query: z.object({
+        id: z.string()
+      })
+    },
+    existenceCheck: {
+      query: { id: 'entries' }
+    },
+    output: {
+      OK: z.string(),
+      BAD_REQUEST: z.string(),
+      NOT_FOUND: true
+    }
   })
   .callback(
     async ({
@@ -24,18 +30,19 @@ export const transcribeExisted = forge
       query: { id },
       core: {
         api: { getAPIKey }
-      }
+      },
+      response
     }) => {
       const apiKey = await getAPIKey('openai', pb)
 
       if (!apiKey) {
-        throw new ClientError('API key not found')
+        return response.badRequest('API key not found')
       }
 
       const entry = await pb.getOne.collection('entries').id(id).execute()
 
       if (!entry.file) {
-        throw new ClientError('No audio file found in entry')
+        return response.badRequest('No audio file found in entry')
       }
 
       const fileURL = pb.instance.files.getURL(entry, entry.file[0])
@@ -63,17 +70,17 @@ export const transcribeExisted = forge
           filePath = mp3Path
         }
 
-        const response = await getTranscription(filePath, apiKey)
+        const transcriptionText = await getTranscription(filePath, apiKey)
 
-        if (!response) {
-          throw new Error('Transcription failed')
+        if (!transcriptionText) {
+          return response.badRequest('Transcription failed')
         }
 
         await pb.update
           .collection('entries')
           .id(id)
           .data({
-            transcription: response
+            transcription: transcriptionText
           })
           .execute()
 
@@ -81,10 +88,11 @@ export const transcribeExisted = forge
           fs.unlinkSync(filePath)
         }
 
-        return response
+        return response.ok(transcriptionText)
       } catch (err) {
         console.error('Error during transcription:', err)
-        throw new Error('Failed to transcribe audio file')
+
+        return response.badRequest('Failed to transcribe audio file')
       } finally {
         const filePath = `medium/${fileURL.split('/').pop()}`
 
@@ -96,12 +104,16 @@ export const transcribeExisted = forge
   )
 
 export const transcribeNew = forge
-  .mutation()
-  .description('Transcribe a new audio file')
-  .input({})
-  .media({
-    file: {
-      optional: false
+  .mutation({
+    description: 'Transcribe a new audio file',
+    media: {
+      file: {
+        optional: false
+      }
+    },
+    output: {
+      OK: z.string(),
+      BAD_REQUEST: z.string()
     }
   })
   .callback(
@@ -110,10 +122,11 @@ export const transcribeNew = forge
       media: { file },
       core: {
         api: { getAPIKey }
-      }
+      },
+      response
     }) => {
       if (!file || typeof file === 'string') {
-        throw new ClientError('No file uploaded')
+        return response.badRequest('No file uploaded')
       }
 
       if (file.mimetype !== 'audio/mp3') {
@@ -123,60 +136,71 @@ export const transcribeNew = forge
       const apiKey = await getAPIKey('openai', pb)
 
       if (!apiKey) {
-        throw new ClientError('API key not found')
+        return response.badRequest('API key not found')
       }
 
-      const response = await getTranscription(file.path, apiKey)
+      const transcriptionText = await getTranscription(file.path, apiKey)
 
-      if (!response) {
-        throw new Error('Transcription failed')
+      if (!transcriptionText) {
+        return response.badRequest('Transcription failed')
       }
 
       if (fs.existsSync(file.path)) {
         fs.unlinkSync(file.path)
       }
 
-      return response
+      return response.ok(transcriptionText)
     }
   )
 
 export const updateTranscription = forge
-  .mutation()
-  .description('Update transcription of an audio entry')
-  .input({
-    query: z.object({
-      id: z.string()
-    }),
-    body: z.object({
-      transcription: z.string()
-    })
-  })
-  .existenceCheck('query', {
-    id: 'entries'
-  })
-  .callback(async ({ pb, query: { id }, body: { transcription } }) => {
-    const entry = await pb.update
-      .collection('entries')
-      .id(id)
-      .data({
-        transcription
+  .mutation({
+    description: 'Update transcription of an audio entry',
+    input: {
+      query: z.object({
+        id: z.string()
+      }),
+      body: z.object({
+        transcription: z.string()
       })
-      .execute()
-
-    return entry
+    },
+    existenceCheck: {
+      query: { id: 'entries' }
+    },
+    output: {
+      OK: momentVaultSchemas.entries,
+      NOT_FOUND: true
+    }
   })
+  .callback(async ({ pb, query: { id }, body: { transcription }, response }) =>
+    response.ok(
+      await pb.update
+        .collection('entries')
+        .id(id)
+        .data({
+          transcription
+        })
+        .execute()
+    )
+  )
 
 export const cleanupTranscription = forge
-  .mutation()
-  .description('Clean up and improve transcription text')
-  .input({
-    query: z.object({
-      id: z.string(),
-      newText: z.string().optional()
-    })
-  })
-  .existenceCheck('query', {
-    id: 'entries'
+  .mutation({
+    description: 'Clean up and improve transcription text',
+    input: {
+      query: z.object({
+        id: z.string(),
+        newText: z.string().optional()
+      })
+    },
+    existenceCheck: {
+      query: { id: 'entries' }
+    },
+    output: {
+      OK: z.string(),
+      BAD_REQUEST: z.string(),
+      NOT_FOUND: true
+    }
   })
   .callback(
     async ({
@@ -184,12 +208,13 @@ export const cleanupTranscription = forge
       query: { id, newText },
       core: {
         api: { getAPIKey, fetchAI }
-      }
+      },
+      response
     }) => {
       const apiKey = await getAPIKey('openai', pb)
 
       if (!apiKey) {
-        throw new ClientError('API key not found')
+        return response.badRequest('API key not found')
       }
 
       let textToCleanUp: string
@@ -198,7 +223,7 @@ export const cleanupTranscription = forge
         const entry = await pb.getOne.collection('entries').id(id).execute()
 
         if (!entry.transcription) {
-          throw new ClientError('No transcription data to clean up')
+          return response.badRequest('No transcription data to clean up')
         }
 
         textToCleanUp = entry.transcription
@@ -206,7 +231,7 @@ export const cleanupTranscription = forge
         textToCleanUp = newText
       }
 
-      const response = await fetchAI({
+      const aiResponse = await fetchAI({
         provider: 'openai',
         model: 'gpt-4o-mini',
         pb,
@@ -226,10 +251,10 @@ export const cleanupTranscription = forge
         })
       })
 
-      if (!response || !response.cleanedTranscription) {
-        throw new Error('Failed to clean up transcription')
+      if (!aiResponse || !aiResponse.cleanedTranscription) {
+        return response.badRequest('Failed to clean up transcription')
       }
 
-      return response.cleanedTranscription
+      return response.ok(aiResponse.cleanedTranscription)
     }
   )

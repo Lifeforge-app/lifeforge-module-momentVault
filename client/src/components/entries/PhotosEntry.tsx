@@ -8,7 +8,7 @@ import PhotoAlbum from 'react-photo-album'
 
 import { Card, ContextMenu, ContextMenuItem } from '@lifeforge/ui'
 
-import forgeAPI from '@/utils/forgeAPI'
+import { forgeAPI } from '@/manifest'
 
 dayjs.extend(relativeTime)
 

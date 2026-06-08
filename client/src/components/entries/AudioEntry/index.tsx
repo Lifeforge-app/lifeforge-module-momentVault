@@ -16,7 +16,7 @@ import type { InferOutput } from '@lifeforge/shared'
 
 import EditTranscriptionModal from '@/modals/EditTranscriptionModal'
 import { useAudioPlayer } from '@/providers/AudioPlayerProvider'
-import forgeAPI from '@/utils/forgeAPI'
+import { forgeAPI } from '@/manifest'
 
 import AudioPlayer from './components/AudioPlayer'
 

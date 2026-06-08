@@ -13,7 +13,7 @@ import 'react-photo-album/styles.css'
 import type { InferOutput } from '@lifeforge/shared'
 
 import { AudioPlayerProvider } from '@/providers/AudioPlayerProvider'
-import forgeAPI from '@/utils/forgeAPI'
+import { forgeAPI } from '@/manifest'
 
 import EntryList from './components/EntryList'
 import './index.css'

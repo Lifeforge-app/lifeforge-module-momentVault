@@ -3,7 +3,7 @@ import { FormModal, defineForm } from '@lifeforge/ui'
 import { toast } from 'react-toastify'
 import type { InferInput } from '@lifeforge/shared'
 
-import forgeAPI from '@/utils/forgeAPI'
+import { forgeAPI } from '@/manifest'
 
 import type { MomentVaultEntry } from '..'
 

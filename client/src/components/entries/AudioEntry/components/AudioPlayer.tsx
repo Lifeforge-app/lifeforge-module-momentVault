@@ -11,7 +11,7 @@ import {
   type AudioPlayerContextType,
   useAudioPlayer
 } from '@/providers/AudioPlayerProvider'
-import forgeAPI from '@/utils/forgeAPI'
+import { forgeAPI } from '@/manifest'
 
 // Separate component for timer display to prevent parent rerenders
 const TimeDisplay = memo(
