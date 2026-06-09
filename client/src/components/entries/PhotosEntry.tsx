@@ -1,11 +1,11 @@
 import type { MomentVaultEntry } from '@'
-import { Icon , Card, ContextMenu, ContextMenuItem } from '@lifeforge/ui'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { useEffect, useState } from 'react'
 import Zoom from 'react-medium-image-zoom'
 import PhotoAlbum from 'react-photo-album'
 
+import { Card, ContextMenu, ContextMenuItem, Icon } from '@lifeforge/ui'
 
 import { forgeAPI } from '@/manifest'
 

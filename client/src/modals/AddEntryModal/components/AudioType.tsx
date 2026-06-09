@@ -4,7 +4,7 @@ import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import WaveSurfer from 'wavesurfer.js'
 
-import { Icon , toast , Button , usePersonalization } from '@lifeforge/ui'
+import { Button, Icon, toast, usePersonalization } from '@lifeforge/ui'
 
 import { forgeAPI } from '@/manifest'
 

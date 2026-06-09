@@ -9,8 +9,9 @@ import {
   ContextMenu,
   ContextMenuItem,
   FAB,
-  ModuleHeader
-, useModalStore } from '@lifeforge/ui'
+  ModuleHeader,
+  useModalStore
+} from '@lifeforge/ui'
 
 import { forgeAPI } from '@/manifest'
 import { AudioPlayerProvider } from '@/providers/AudioPlayerProvider'

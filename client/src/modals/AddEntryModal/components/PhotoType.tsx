@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import PhotoAlbum from 'react-photo-album'
 
-import { Icon , toast , Button } from '@lifeforge/ui'
+import { Button, Icon, toast } from '@lifeforge/ui'
 
 import { forgeAPI } from '@/manifest'
 
