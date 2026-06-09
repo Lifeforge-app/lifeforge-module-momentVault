@@ -17,7 +17,6 @@ import { forgeAPI } from '@/manifest'
 import { AudioPlayerProvider } from '@/providers/AudioPlayerProvider'
 
 import EntryList from './components/EntryList'
-import './index.css'
 import AddEntryModal from './modals/AddEntryModal'
 
 export type MomentVaultEntry = InferOutput<
