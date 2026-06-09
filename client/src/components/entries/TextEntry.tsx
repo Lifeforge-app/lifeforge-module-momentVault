@@ -1,11 +1,9 @@
 import type { MomentVaultEntry } from '@'
-import { Icon } from '@iconify/react'
+import { Icon , Card, ContextMenu, ContextMenuItem , useModalStore } from '@lifeforge/ui'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { useCallback } from 'react'
 
-import { Card, ContextMenu, ContextMenuItem } from '@lifeforge/ui'
-import { useModalStore } from '@lifeforge/ui'
 
 import ModifyTextEntryModal from '@/modals/ModifyTextEntryModal'
 

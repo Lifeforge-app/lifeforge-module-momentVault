@@ -1,7 +1,6 @@
 import { useState } from 'react'
-import { toast } from 'react-toastify'
 
-import { Button, TextAreaInput } from '@lifeforge/ui'
+import { toast , Button, TextAreaInput } from '@lifeforge/ui'
 
 import { forgeAPI } from '@/manifest'
 

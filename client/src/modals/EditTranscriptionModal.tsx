@@ -1,13 +1,12 @@
 import type { MomentVaultEntry } from '@'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
-import { toast } from 'react-toastify'
 
-import { FormModal, defineForm } from '@lifeforge/ui'
+import { FormModal, defineForm, toast } from '@lifeforge/ui'
 
 import AudioPlayer from '@/components/entries/AudioEntry/components/AudioPlayer'
-import type { AudioPlayerContextType } from '@/providers/AudioPlayerProvider'
 import { forgeAPI } from '@/manifest'
+import type { AudioPlayerContextType } from '@/providers/AudioPlayerProvider'
 
 function EditTranscriptionModal({
   onClose,
@@ -66,7 +65,7 @@ function EditTranscriptionModal({
               id: entry.id,
               newText: shouldUseNewText ? data.transcription : undefined
             })
-            .mutate({})
+            .mutate(undefined)
 
           setData({ transcription: response })
           setCleanupLoading(false)

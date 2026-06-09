@@ -1,19 +1,19 @@
 import { useQuery } from '@tanstack/react-query'
+import { useCallback, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import 'react-photo-album/styles.css'
+
+import type { InferOutput } from '@lifeforge/api'
 import {
   Button,
   ContextMenu,
   ContextMenuItem,
   FAB,
   ModuleHeader
-} from '@lifeforge/ui'
-import { useModalStore } from '@lifeforge/ui'
-import { useCallback, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-import 'react-photo-album/styles.css'
-import type { InferOutput } from '@lifeforge/shared'
+, useModalStore } from '@lifeforge/ui'
 
-import { AudioPlayerProvider } from '@/providers/AudioPlayerProvider'
 import { forgeAPI } from '@/manifest'
+import { AudioPlayerProvider } from '@/providers/AudioPlayerProvider'
 
 import EntryList from './components/EntryList'
 import './index.css'

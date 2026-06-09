@@ -1,17 +1,16 @@
 import type { MomentVaultEntry } from '@'
-import { Icon } from '@iconify/react'
+import { Icon , Button, useModalStore , usePersonalization } from '@lifeforge/ui'
 import WavesurferPlayer from '@wavesurfer/react'
 import dayjs from 'dayjs'
-import { Button, useModalStore } from '@lifeforge/ui'
 import { memo, useCallback, useEffect, useId, useMemo, useState } from 'react'
-import { usePersonalization } from '@lifeforge/shared'
 import type WaveSurfer from 'wavesurfer.js'
 
+
+import { forgeAPI } from '@/manifest'
 import {
   type AudioPlayerContextType,
   useAudioPlayer
 } from '@/providers/AudioPlayerProvider'
-import { forgeAPI } from '@/manifest'
 
 // Separate component for timer display to prevent parent rerenders
 const TimeDisplay = memo(

@@ -1,12 +1,10 @@
-import { Icon } from '@iconify/react'
 import WavesurferPlayer from '@wavesurfer/react'
 import dayjs from 'dayjs'
-import { Button } from '@lifeforge/ui'
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'react-toastify'
-import { usePersonalization } from '@lifeforge/shared'
 import WaveSurfer from 'wavesurfer.js'
+
+import { Icon , toast , Button , usePersonalization } from '@lifeforge/ui'
 
 import { forgeAPI } from '@/manifest'
 

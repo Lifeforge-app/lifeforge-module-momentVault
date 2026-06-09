@@ -1,15 +1,13 @@
-import { Icon } from '@iconify/react'
-import { useQueryClient } from '@tanstack/react-query'
-import { useCallback, useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
-
-import {
+import { Icon ,
   ConfirmationModal,
   ListboxInput,
   ListboxOption,
   ModalHeader
-} from '@lifeforge/ui'
-import { useModalStore } from '@lifeforge/ui'
+, useModalStore } from '@lifeforge/ui'
+import { useQueryClient } from '@tanstack/react-query'
+import { useCallback, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
+
 
 import AudioType from './components/AudioType'
 import PhotoType from './components/PhotoType'
@@ -101,8 +99,8 @@ function AddEntryModal({
           icon="tabler:apps"
           label="Entry Type"
           namespace="apps.momentVault"
-          onChange={setInnerOpenType}
           value={innerOpenType}
+          onChange={setInnerOpenType}
         >
           {TYPES.map(({ id, icon }, i) => (
             <ListboxOption

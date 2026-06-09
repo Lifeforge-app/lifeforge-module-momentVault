@@ -1,22 +1,23 @@
 import type { MomentVaultEntry } from '@'
-import { Icon } from '@iconify/react'
 import { useQueryClient } from '@tanstack/react-query'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import { useState } from 'react'
+
+import type { InferOutput } from '@lifeforge/api'
 import {
   Card,
   ConfirmationModal,
   ContextMenu,
-  ContextMenuItem
+  ContextMenuItem,
+  Icon,
+  toast,
+  useModalStore
 } from '@lifeforge/ui'
-import { useModalStore } from '@lifeforge/ui'
-import { useState } from 'react'
-import { toast } from 'react-toastify'
-import type { InferOutput } from '@lifeforge/shared'
 
+import { forgeAPI } from '@/manifest'
 import EditTranscriptionModal from '@/modals/EditTranscriptionModal'
 import { useAudioPlayer } from '@/providers/AudioPlayerProvider'
-import { forgeAPI } from '@/manifest'
 
 import AudioPlayer from './components/AudioPlayer'
 
@@ -47,7 +48,7 @@ function AudioEntry({
         .input({
           id: entry.id
         })
-        .mutate({})
+        .mutate(undefined)
 
       queryClient.setQueryData(
         forgeAPI.entries.list.input({
@@ -82,7 +83,9 @@ function AudioEntry({
 
   async function toggleReviewed() {
     try {
-      await forgeAPI.entries.toggleReviewed.input({ id: entry.id }).mutate({})
+      await forgeAPI.entries.toggleReviewed
+        .input({ id: entry.id })
+        .mutate(undefined)
 
       queryClient.invalidateQueries({
         queryKey: ['momentVault', 'entries']
