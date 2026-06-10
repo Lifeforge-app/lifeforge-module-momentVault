@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import { useCallback, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useModuleTranslation } from '@lifeforge/localization'
 import 'react-photo-album/styles.css'
 
 import type { InferOutput } from '@lifeforge/api'
@@ -26,7 +26,7 @@ export type MomentVaultEntry = InferOutput<
 function MomentVault() {
   const { open } = useModalStore()
 
-  const { t } = useTranslation('apps.momentVault')
+  const { t } = useModuleTranslation()
 
   const [page, setPage] = useState(1)
 

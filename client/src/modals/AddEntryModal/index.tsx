@@ -1,6 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useCallback, useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useModuleTranslation } from '@lifeforge/localization'
 
 import {
   ConfirmationModal,
@@ -45,7 +45,7 @@ function AddEntryModal({
 }) {
   const { open } = useModalStore()
 
-  const { t } = useTranslation('apps.momentVault')
+  const { t } = useModuleTranslation()
 
   const queryClient = useQueryClient()
 

@@ -1,7 +1,7 @@
 import WavesurferPlayer from '@wavesurfer/react'
 import dayjs from 'dayjs'
 import { useRef, useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useModuleTranslation } from '@lifeforge/localization'
 import WaveSurfer from 'wavesurfer.js'
 
 import { Button, Icon, toast, usePersonalization } from '@lifeforge/ui'
@@ -23,7 +23,7 @@ function AudioType({
   setTranscription: (transcription: string | null) => void
   setOverwriteAudioWarningModalOpen: (open: boolean) => void
 }) {
-  const { t } = useTranslation('apps.momentVault')
+  const { t } = useModuleTranslation()
 
   const {
     derivedTheme,

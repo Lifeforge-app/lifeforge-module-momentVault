@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { useTranslation } from 'react-i18next'
+import { useModuleTranslation } from '@lifeforge/localization'
 import PhotoAlbum from 'react-photo-album'
 
 import { Button, Icon, toast } from '@lifeforge/ui'
@@ -19,7 +19,7 @@ async function getNaturalHeightWidth(file: File) {
 }
 
 function PhotoType({ onSuccess }: { onSuccess: () => void }) {
-  const { t } = useTranslation('apps.momentVault')
+  const { t } = useModuleTranslation()
 
   const [photos, setPhotos] = useState<
     {
