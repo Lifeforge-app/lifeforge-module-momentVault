@@ -44,13 +44,9 @@ function AddEntryModal({
   onClose: () => void
 }) {
   const { open } = useModalStore()
-
   const { t } = useModuleTranslation()
-
   const queryClient = useQueryClient()
-
   const [audioURL, setAudioURL] = useState<string | null>(null)
-
   const [transcription, setTranscription] = useState<string | null>(null)
 
   const [innerOpenType, setInnerOpenType] = useState<

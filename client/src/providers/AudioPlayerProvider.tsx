@@ -18,9 +18,7 @@ const AudioPlayerContext = createContext<AudioPlayerContextType | undefined>(
 
 export function AudioPlayerProvider({ children }: { children: ReactNode }) {
   const players = useRef<Map<string, WaveSurfer>>(new Map())
-
   const [currentActive, setCurrentActive] = useState<string | null>(null)
-
   const [playbackSpeed, setPlaybackSpeed] = useState<number>(1)
 
   const registerPlayer = (id: string, wavesurfer: WaveSurfer) => {

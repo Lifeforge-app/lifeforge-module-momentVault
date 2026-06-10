@@ -33,11 +33,8 @@ function AudioEntry({
   onDelete: () => void
 }) {
   const { open } = useModalStore()
-
   const audioPlayerContext = useAudioPlayer()
-
   const queryClient = useQueryClient()
-
   const [transcriptionLoading, setTranscriptionLoading] = useState(false)
 
   async function addTranscription() {

@@ -32,9 +32,7 @@ function AudioPlayer({
   audioPlayerContext?: AudioPlayerContextType
 }) {
   const { stack } = useModalStore()
-
   const instanceId = useId()
-
   const contextFromProvider = useAudioPlayer()
 
   const {
@@ -57,13 +55,9 @@ function AudioPlayer({
   } = usePersonalization()
 
   const [ready, setReady] = useState(false)
-
   const [totalTime, setTotalTime] = useState(0)
-
   const [currentTime, setCurrentTime] = useState(0)
-
   const [wavesurfer, setWavesurfer] = useState<WaveSurfer | null>(null)
-
   const [isPlaying, setIsPlaying] = useState(false)
 
   const mediaUrl = useMemo(

@@ -10,17 +10,11 @@ type RecordingState = 'idle' | 'recording' | 'submitting'
 
 function QuickAudioCapture() {
   const queryClient = useQueryClient()
-
   const wrapperRef = useRef<HTMLDivElement | null>(null)
-
   const { width, height } = useDivSize(wrapperRef)
-
   const [state, setState] = useState<RecordingState>('idle')
-
   const streamRef = useRef<MediaStream | null>(null)
-
   const mediaRecorderRef = useRef<MediaRecorder | null>(null)
-
   const audioChunksRef = useRef<Blob[]>([])
 
   const startRecording = useCallback(async () => {
@@ -94,7 +88,6 @@ function QuickAudioCapture() {
   }, [state, queryClient])
 
   const activePointerRef = useRef<number | null>(null)
-
   const stopRecordingRef = useRef(stopRecording)
 
   stopRecordingRef.current = stopRecording

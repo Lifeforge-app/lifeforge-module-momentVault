@@ -19,7 +19,6 @@ function EditTranscriptionModal({
   }
 }) {
   const queryClient = useQueryClient()
-
   const [cleanupLoading, setCleanupLoading] = useState(false)
 
   const mutation = useMutation(

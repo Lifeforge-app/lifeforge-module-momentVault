@@ -27,7 +27,6 @@ function EntryList({
   setPage: React.Dispatch<React.SetStateAction<number>>
 }) {
   const queryClient = useQueryClient()
-
   const { open } = useModalStore()
 
   const handleDeleteEntry = useCallback(

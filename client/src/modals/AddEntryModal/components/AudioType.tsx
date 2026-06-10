@@ -32,23 +32,14 @@ function AudioType({
   } = usePersonalization()
 
   const [recording, setRecording] = useState(false)
-
   const [totalTime, setTotalTime] = useState(0)
-
   const [currentTime, setCurrentTime] = useState(0)
-
   const streamRef = useRef<MediaStream | null>(null)
-
   const mediaRecorderRef = useRef<MediaRecorder | null>(null)
-
   const audioChunksRef = useRef<Blob[]>([])
-
   const [wavesurfer, setWavesurfer] = useState<WaveSurfer | null>(null)
-
   const [isPlaying, setIsPlaying] = useState(false)
-
   const [transcribeLoading, setTranscribeLoading] = useState(false)
-
   const [submitLoading, setSubmitLoading] = useState(false)
 
   const startRecording = async () => {

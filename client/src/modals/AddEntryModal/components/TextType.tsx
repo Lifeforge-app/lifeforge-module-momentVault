@@ -6,7 +6,6 @@ import { forgeAPI } from '@/manifest'
 
 function TextType({ onSuccess }: { onSuccess: () => void }) {
   const [text, setText] = useState('')
-
   const [submitLoading, setSubmitLoading] = useState(false)
 
   async function onSubmit() {

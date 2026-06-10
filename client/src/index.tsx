@@ -25,9 +25,7 @@ export type MomentVaultEntry = InferOutput<
 
 function MomentVault() {
   const { open } = useModalStore()
-
   const { t } = useModuleTranslation()
-
   const [page, setPage] = useState(1)
 
   const dataQuery = useQuery(
