@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import { useModuleTranslation } from '@lifeforge/localization'
 import PhotoAlbum from 'react-photo-album'
 
+import { useModuleTranslation } from '@lifeforge/localization'
 import { Button, Icon, toast } from '@lifeforge/ui'
 
 import { forgeAPI } from '@/manifest'
@@ -144,7 +144,6 @@ function PhotoType({ onSuccess }: { onSuccess: () => void }) {
           <Button
             className="mt-6"
             icon="tabler:plus"
-            namespace="apps.momentVault"
             variant="secondary"
             onClick={selectPhotos}
           >

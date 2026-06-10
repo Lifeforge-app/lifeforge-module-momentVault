@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 import { useCallback, useState } from 'react'
-import { useModuleTranslation } from '@lifeforge/localization'
 import 'react-photo-album/styles.css'
 
 import type { InferOutput } from '@lifeforge/api'
+import { useModuleTranslation } from '@lifeforge/localization'
 import {
   Button,
   ContextMenu,
@@ -72,7 +72,6 @@ function MomentVault() {
                 key={type}
                 icon={icon}
                 label={type}
-                namespace="apps.momentVault"
                 onClick={handleAddEntry(type)}
               />
             ))}
@@ -96,7 +95,6 @@ function MomentVault() {
             key={type}
             icon={icon}
             label={type}
-            namespace="apps.momentVault"
             onClick={handleAddEntry(type)}
           />
         ))}

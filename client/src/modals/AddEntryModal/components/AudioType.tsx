@@ -1,9 +1,9 @@
 import WavesurferPlayer from '@wavesurfer/react'
 import dayjs from 'dayjs'
 import { useRef, useState } from 'react'
-import { useModuleTranslation } from '@lifeforge/localization'
 import WaveSurfer from 'wavesurfer.js'
 
+import { useModuleTranslation } from '@lifeforge/localization'
 import { Button, Icon, toast, usePersonalization } from '@lifeforge/ui'
 
 import { forgeAPI } from '@/manifest'
@@ -210,7 +210,6 @@ function AudioType({
               className="mt-6 w-full"
               icon="tabler:transfer"
               loading={transcribeLoading}
-              namespace="apps.momentVault"
               variant="plain"
               onClick={() => {
                 transcribeText()

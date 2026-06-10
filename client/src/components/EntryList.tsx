@@ -120,8 +120,7 @@ function EntryList({
           <EmptyStateScreen
             icon="tabler:history-off"
             message={{
-              id: 'entries',
-              namespace: 'apps.momentVault'
+              id: 'entries'
             }}
           />
         )

@@ -116,7 +116,6 @@ function AudioEntry({
             icon="tabler:file-text"
             label="Transcribe to Text"
             loading={transcriptionLoading}
-            namespace="apps.momentVault"
             shouldCloseMenuOnClick={false}
             onClick={() => {
               addTranscription().catch(console.error)
@@ -127,7 +126,6 @@ function AudioEntry({
             <ContextMenuItem
               icon={entry.reviewed ? 'tabler:circle-off' : 'tabler:check'}
               label={entry.reviewed ? 'Mark as Unreviewed' : 'Mark as Reviewed'}
-              namespace="apps.momentVault"
               onClick={toggleReviewed}
             />
             {!entry.reviewed && (
@@ -135,7 +133,6 @@ function AudioEntry({
                 <ContextMenuItem
                   icon="tabler:pencil"
                   label="Edit Transcription"
-                  namespace="apps.momentVault"
                   onClick={() => {
                     open(EditTranscriptionModal, {
                       entry,
@@ -148,7 +145,6 @@ function AudioEntry({
                   icon="tabler:refresh"
                   label="Retranscribe"
                   loading={transcriptionLoading}
-                  namespace="apps.momentVault"
                   onClick={() => {
                     open(ConfirmationModal, {
                       title: 'Retranscribe Audio',

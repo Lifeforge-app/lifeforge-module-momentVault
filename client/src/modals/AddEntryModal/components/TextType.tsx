@@ -33,7 +33,6 @@ function TextType({ onSuccess }: { onSuccess: () => void }) {
         required
         icon="tabler:file-text"
         label="Text Content"
-        namespace="apps.momentVault"
         placeholder="What a beautiful day..."
         value={text}
         onChange={setText}

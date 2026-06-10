@@ -126,11 +126,7 @@ function QuickAudioCapture() {
   )
 
   return (
-    <Widget
-      className="p-2! min-[400px]:p-4!"
-      icon="tabler:microphone"
-      namespace="apps.momentVault"
-    >
+    <Widget className="p-2! min-[400px]:p-4!" icon="tabler:microphone">
       <div ref={wrapperRef} className="flex-center min-h-0 flex-1">
         <Button
           className={`aspect-square touch-none min-[400px]:rounded-full! ${
@@ -154,7 +150,6 @@ function QuickAudioCapture() {
 export default QuickAudioCapture
 
 export const config: WidgetConfig = {
-  namespace: 'apps.momentVault',
   id: 'quickAudioCapture',
   icon: 'tabler:microphone',
   minW: 1,

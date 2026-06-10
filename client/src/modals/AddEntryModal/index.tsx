@@ -1,7 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { useCallback, useEffect, useState } from 'react'
-import { useModuleTranslation } from '@lifeforge/localization'
 
+import { useModuleTranslation } from '@lifeforge/localization'
 import {
   ConfirmationModal,
   Icon,
@@ -74,12 +74,7 @@ function AddEntryModal({
 
   return (
     <div className="min-w-[50vw]">
-      <ModalHeader
-        icon="tabler:plus"
-        namespace="apps.momentVault"
-        title="Add Entry"
-        onClose={onClose}
-      />
+      <ModalHeader icon="tabler:plus" title="Add Entry" onClose={onClose} />
       <div className="space-y-3">
         <ListboxInput
           required
@@ -96,7 +91,6 @@ function AddEntryModal({
           }
           icon="tabler:apps"
           label="Entry Type"
-          namespace="apps.momentVault"
           value={innerOpenType}
           onChange={setInnerOpenType}
         >
