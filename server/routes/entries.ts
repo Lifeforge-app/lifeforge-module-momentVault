@@ -1,7 +1,7 @@
 import fs from 'fs'
 import z from 'zod'
 
-import { type IPBService } from '@lifeforge/server-utils'
+import { type IPBService } from '@lifeforge/pocketbase'
 
 import forge from '../forge'
 import schema from '../schema'

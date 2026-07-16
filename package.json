@@ -6,12 +6,16 @@
     "url": "https://github.com/lifeforge-app/lifeforge-module-momentVault.git"
   },
   "version": "0.0.5",
+  "type": "module",
   "author": "Melvin Chia <melvinchia623600@gmail.com>",
   "description": "Capture every moment, cherish your life, revisit anytime.",
   "scripts": {
-    "types": "cd client && bun tsc",
-    "build:client": "cd client && bun run vite build",
-    "build:server": "bun build ./server/index.ts --outdir ./server/dist --target bun --external @lifeforge/server-utils --external zod"
+    "typecheck": "pnpm run typecheck:client && pnpm run typecheck:server",
+    "typecheck:client": "cd client && tsc",
+    "typecheck:server": "cd server && tsc",
+    "build": "pnpm run build:client && pnpm run build:server",
+    "build:client": "cd client && vite build",
+    "build:server": "cd server && vite build"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.9",
@@ -35,6 +39,7 @@
   "peerDependencies": {
     "@lifeforge/api": "workspace:*",
     "@lifeforge/server-utils": "workspace:*",
+    "@lifeforge/pocketbase": "workspace:*",
     "@lifeforge/localization": "workspace:*",
     "@lifeforge/ui": "workspace:*",
     "@lifeforge/federation": "workspace:*",
