@@ -38,11 +38,11 @@
   },
   "peerDependencies": {
     "@lifeforge/api": "workspace:*",
-    "@lifeforge/server-utils": "workspace:*",
-    "@lifeforge/pocketbase": "workspace:*",
-    "@lifeforge/localization": "workspace:*",
-    "@lifeforge/ui": "workspace:*",
+    "@lifeforge/configs": "workspace:*",
     "@lifeforge/federation": "workspace:*",
-    "@lifeforge/configs": "workspace:*"
+    "@lifeforge/localization": "workspace:*",
+    "@lifeforge/pocketbase": "workspace:*",
+    "@lifeforge/server-utils": "workspace:*",
+    "@lifeforge/ui": "workspace:*"
   }
 }
