@@ -1,5 +1,5 @@
-import { defineModuleConfig } from '@lifeforge/configs/vite'
+import { defineModuleClientConfig } from '@lifeforge/configs/vite'
 
-export default defineModuleConfig({
+export default defineModuleClientConfig({
   dirname: __dirname
 })
