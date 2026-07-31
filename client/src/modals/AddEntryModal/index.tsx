@@ -78,7 +78,9 @@ function AddEntryModal({
       <div className="space-y-3">
         <ListboxInput
           required
-          buttonContent={
+          icon="tabler:apps"
+          label="Entry Type"
+          renderContent={() => (
             <>
               <Icon
                 className="size-5"
@@ -88,9 +90,7 @@ function AddEntryModal({
                 {t(`entryTypes.${TYPES.find(l => l.id === innerOpenType)?.id}`)}
               </span>
             </>
-          }
-          icon="tabler:apps"
-          label="Entry Type"
+          )}
           value={innerOpenType}
           onChange={setInnerOpenType}
         >

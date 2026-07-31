@@ -48,7 +48,7 @@ function MomentVault() {
   return (
     <AudioPlayerProvider>
       <ModuleHeader
-        actionButton={
+        trailing={
           <ContextMenu
             buttonComponent={
               <Button
