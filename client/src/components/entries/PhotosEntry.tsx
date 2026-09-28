@@ -5,7 +5,15 @@ import { useEffect, useState } from 'react'
 import Zoom from 'react-medium-image-zoom'
 import PhotoAlbum from 'react-photo-album'
 
-import { Card, ContextMenu, ContextMenuItem, Icon } from '@lifeforge/ui'
+import {
+  Box,
+  Card,
+  ContextMenu,
+  ContextMenuItem,
+  Flex,
+  Icon,
+  Text
+} from '@lifeforge/ui'
 
 import { forgeAPI } from '@/manifest'
 
@@ -69,29 +77,34 @@ function PhotosEntry({
 
   return (
     <Card as="li">
-      <div className="flex w-full items-start gap-3">
+      <Flex align="start" gap="sm" width="100%">
         {loading ? (
-          <div className="flex-center h-96 w-full">
-            <div className="loader" />
-          </div>
+          <Flex centered height="24rem" width="100%">
+            <Box className="loader" />
+          </Flex>
         ) : (
           <>
-            <div className="w-full">
+            <Box width="100%">
               {photos.length > 1 ? (
                 <PhotoAlbum
                   layout="rows"
                   photos={photos}
                   // @ts-expect-error - Some issue with the types
                   renderPhoto={({ imageProps }) => (
-                    <div style={imageProps.style}>
+                    <Box style={imageProps.style}>
                       <Zoom zoomMargin={64}>
                         <img
                           alt=""
-                          className="h-full w-full rounded-md object-cover"
                           src={imageProps.src}
+                          style={{
+                            borderRadius: 'var(--radius-md)',
+                            height: '100%',
+                            objectFit: 'cover',
+                            width: '100%'
+                          }}
                         />
                       </Zoom>
-                    </div>
+                    </Box>
                   )}
                   spacing={8}
                 />
@@ -99,12 +112,16 @@ function PhotosEntry({
                 <Zoom zoomMargin={64}>
                   <img
                     alt=""
-                    className="h-96 rounded-md object-cover"
                     src={photos[0].src}
+                    style={{
+                      borderRadius: 'var(--radius-md)',
+                      height: '24rem',
+                      objectFit: 'cover'
+                    }}
                   />
                 </Zoom>
               )}
-            </div>
+            </Box>
             <ContextMenu>
               <ContextMenuItem
                 dangerous
@@ -115,10 +132,11 @@ function PhotosEntry({
             </ContextMenu>
           </>
         )}
-      </div>
-      <p className="text-bg-500 mt-4 flex items-center gap-2">
-        <Icon icon="tabler:clock" /> {dayjs(entry.created).fromNow()}
-      </p>
+      </Flex>
+      <Flex align="center" gap="sm" mt="md">
+        <Icon color="muted" icon="tabler:clock" />
+        <Text color="muted">{dayjs(entry.created).fromNow()}</Text>
+      </Flex>
     </Card>
   )
 }

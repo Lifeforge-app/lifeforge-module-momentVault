@@ -52,7 +52,7 @@ function MomentVault() {
           <ContextMenu
             buttonComponent={
               <Button
-                className="hidden md:flex"
+                display={{ base: 'none', md: 'flex' }}
                 icon="tabler:plus"
                 tProps={{ item: t('items.entry') }}
                 onClick={() => {}}
@@ -60,7 +60,6 @@ function MomentVault() {
                 new
               </Button>
             }
-            classNames={{ button: 'hidden:md:block' }}
           >
             {[
               { icon: 'tabler:file-text', type: 'text' },
@@ -79,12 +78,7 @@ function MomentVault() {
         }
       />
       <EntryList dataQuery={dataQuery} page={page} setPage={setPage} />
-      <ContextMenu
-        buttonComponent={<FAB className="static!" visibilityBreakpoint="md" />}
-        classNames={{
-          wrapper: 'fixed bottom-6 right-6'
-        }}
-      >
+      <FAB visibilityBreakpoint="md">
         {[
           { icon: 'tabler:file-text', type: 'text' },
           { icon: 'tabler:microphone', type: 'audio' },
@@ -98,7 +92,7 @@ function MomentVault() {
             onClick={handleAddEntry(type)}
           />
         ))}
-      </ContextMenu>
+      </FAB>
     </AudioPlayerProvider>
   )
 }

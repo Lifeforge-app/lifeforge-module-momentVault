@@ -14,7 +14,9 @@
     "retranscribe": "Retranscribe",
     "markAsReviewed": "Mark as Reviewed",
     "markAsUnreviewed": "Mark as Unreviewed",
-    "cleanup": "Cleanup"
+    "cleanup": "Cleanup",
+    "selectPhotos": "Select Photos",
+    "clearPhotos": "Clear Photos"
   },
   "modals": {
     "addEntry": "Add Entry",

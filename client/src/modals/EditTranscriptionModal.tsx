@@ -1,12 +1,25 @@
 import type { MomentVaultEntry } from '@'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
 import { useState } from 'react'
+import z from 'zod'
 
-import { FormModal, defineForm, toast } from '@lifeforge/ui'
+import { useForgeMutation } from '@lifeforge/api'
+import {
+  Button,
+  FormModal,
+  TextAreaField,
+  createDefaultValues,
+  toast
+} from '@lifeforge/ui'
 
 import AudioPlayer from '@/components/entries/AudioEntry/components/AudioPlayer'
 import { forgeAPI } from '@/manifest'
 import type { AudioPlayerContextType } from '@/providers/AudioPlayerProvider'
+
+const schema = z.object({
+  transcription: z.string().min(1, 'Required')
+})
 
 function EditTranscriptionModal({
   onClose,
@@ -18,86 +31,83 @@ function EditTranscriptionModal({
     audioPlayerContext: AudioPlayerContextType
   }
 }) {
-  const queryClient = useQueryClient()
   const [cleanupLoading, setCleanupLoading] = useState(false)
 
-  const mutation = useMutation(
-    forgeAPI.transcribe.updateTranscription
-      .input({ id: entry.id })
-      .mutationOptions({
-        onSuccess: () => {
-          queryClient.invalidateQueries({
-            queryKey: ['momentVault', 'entries']
-          })
-        },
-        onError: (error: any) => {
-          console.error('Error updating transcription:', error)
-          toast.error(
-            'An error occurred while updating the transcription. Please try again.'
-          )
-        }
-      })
+  const updateMutation = useForgeMutation(
+    forgeAPI.transcribe.updateTranscription.input({ id: entry.id }),
+    {
+      action: 'update',
+      queryKey: forgeAPI.entries.key
+    }
   )
 
-  const { formProps } = defineForm<{
-    transcription: string
-  }>({
-    title: 'Edit Transcription',
-    onClose,
-    namespace: 'apps.momentVault',
-    icon: 'tabler:pencil',
-    submitButton: 'update',
-    actionButton: {
-      icon: 'mage:stars-c',
-      namespace: 'apps.momentVault',
-      children: 'Cleanup',
-      loading: cleanupLoading,
-      onClick: async (data, setData) => {
-        try {
-          setCleanupLoading(true)
-
-          const shouldUseNewText =
-            data.transcription.trim() !== entry.transcription?.trim()
-
-          const response = await forgeAPI.transcribe.cleanupTranscription
-            .input({
-              id: entry.id,
-              newText: shouldUseNewText ? data.transcription : undefined
-            })
-            .mutate(undefined)
-
-          setData({ transcription: response })
-          setCleanupLoading(false)
-        } catch (error: any) {
-          console.error('Error cleaning up transcription:', error)
-          toast.error(
-            'An error occurred while cleaning up the transcription. Please try again.'
-          )
-        }
-      }
-    }
-  })
-    .typesMap({
-      transcription: 'textarea'
-    })
-    .setupFields({
-      transcription: {
-        label: 'Transcription',
-        required: true,
-        icon: 'tabler:file-text',
-        placeholder: 'Enter the transcription text here...'
-      }
-    })
-    .initialData({
+  const form = useForm({
+    defaultValues: {
+      ...createDefaultValues(schema),
       transcription: entry.transcription
-    })
-    .onSubmit(async values => {
-      mutation.mutateAsync(values)
-    })
-    .build()
+    },
+    resolver: zodResolver(schema)
+  })
+
+  async function handleCleanup() {
+    try {
+      setCleanupLoading(true)
+
+      const transcription = form.getValues('transcription')
+
+      const shouldUseNewText =
+        transcription.trim() !== entry.transcription?.trim()
+
+      const response = await forgeAPI.transcribe.cleanupTranscription
+        .input({
+          id: entry.id,
+          newText: shouldUseNewText ? transcription : undefined
+        })
+        .mutate(undefined)
+
+      form.setValue('transcription', response, { shouldValidate: true })
+    } catch (error) {
+      console.error('Error cleaning up transcription:', error)
+      toast.error(
+        'An error occurred while cleaning up the transcription. Please try again.'
+      )
+    } finally {
+      setCleanupLoading(false)
+    }
+  }
 
   return (
-    <FormModal {...formProps}>
+    <FormModal
+      form={form}
+      submissionConfig={{
+        template: 'update',
+        handler: updateMutation.mutateAsync
+      }}
+      uiConfig={{
+        icon: 'tabler:pencil',
+        namespace: 'apps.momentVault',
+        title: 'Edit Transcription',
+        onClose,
+        headerActions: (
+          <Button
+            icon="mage:stars-c"
+            loading={cleanupLoading}
+            namespace="apps.momentVault"
+            onClick={handleCleanup}
+          >
+            Cleanup
+          </Button>
+        )
+      }}
+    >
+      <TextAreaField
+        required
+        control={form.control}
+        icon="tabler:file-text"
+        label="Transcription"
+        name="transcription"
+        placeholder="Enter the transcription text here..."
+      />
       <AudioPlayer audioPlayerContext={audioPlayerContext} entry={entry} />
     </FormModal>
   )

@@ -3,13 +3,19 @@ import { useCallback, useEffect, useState } from 'react'
 
 import { useModuleTranslation } from '@lifeforge/localization'
 import {
+  Box,
   ConfirmationModal,
+  Flex,
   Icon,
   ListboxInput,
   ListboxOption,
   ModalHeader,
+  Stack,
+  Text,
   useModalStore
 } from '@lifeforge/ui'
+
+import { forgeAPI } from '@/manifest'
 
 import AudioType from './components/AudioType'
 import PhotoType from './components/PhotoType'
@@ -73,23 +79,22 @@ function AddEntryModal({
   }, [type])
 
   return (
-    <div className="min-w-[50vw]">
+    <Box minWidth="50vw">
       <ModalHeader icon="tabler:plus" title="Add Entry" onClose={onClose} />
-      <div className="space-y-3">
+      <Stack gap="sm">
         <ListboxInput
           required
           icon="tabler:apps"
           label="Entry Type"
           renderContent={() => (
-            <>
+            <Flex align="center" gap="sm">
               <Icon
-                className="size-5"
                 icon={TYPES.find(l => l.id === innerOpenType)?.icon ?? ''}
               />
-              <span className="-mt-px block truncate">
+              <Text truncate display="block">
                 {t(`entryTypes.${TYPES.find(l => l.id === innerOpenType)?.id}`)}
-              </span>
-            </>
+              </Text>
+            </Flex>
           )}
           value={innerOpenType}
           onChange={setInnerOpenType}
@@ -115,7 +120,7 @@ function AddEntryModal({
                 onSuccess={() => {
                   onClose()
                   queryClient.invalidateQueries({
-                    queryKey: ['momentVault', 'entries']
+                    queryKey: forgeAPI.entries.key
                   })
                 }}
               />
@@ -125,7 +130,7 @@ function AddEntryModal({
                 onSuccess={() => {
                   onClose()
                   queryClient.invalidateQueries({
-                    queryKey: ['momentVault', 'entries']
+                    queryKey: forgeAPI.entries.key
                   })
                 }}
               />
@@ -135,7 +140,7 @@ function AddEntryModal({
                 onSuccess={() => {
                   onClose()
                   queryClient.invalidateQueries({
-                    queryKey: ['momentVault', 'entries']
+                    queryKey: forgeAPI.entries.key
                   })
                 }}
               />
@@ -144,8 +149,8 @@ function AddEntryModal({
 
           return components[innerOpenType as keyof typeof components] || <></>
         })()}
-      </div>
-    </div>
+      </Stack>
+    </Box>
   )
 }
 

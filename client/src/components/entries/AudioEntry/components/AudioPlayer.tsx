@@ -4,7 +4,15 @@ import dayjs from 'dayjs'
 import { memo, useCallback, useEffect, useId, useMemo, useState } from 'react'
 import type WaveSurfer from 'wavesurfer.js'
 
-import { Button, Icon, useModalStore, usePersonalization } from '@lifeforge/ui'
+import {
+  Box,
+  Button,
+  Flex,
+  Icon,
+  Text,
+  useModalStore,
+  usePersonalization
+} from '@lifeforge/ui'
 
 import { forgeAPI } from '@/manifest'
 import {
@@ -15,10 +23,12 @@ import {
 // Separate component for timer display to prevent parent rerenders
 const TimeDisplay = memo(
   ({ currentTime, totalTime }: { currentTime: number; totalTime: number }) => (
-    <p className="text-bg-500 w-full text-left text-sm whitespace-nowrap sm:w-auto">
-      {dayjs().startOf('day').second(currentTime).format('mm:ss')} /{' '}
-      {dayjs().startOf('day').second(totalTime).format('mm:ss')}
-    </p>
+    <Box width={{ base: '100%', sm: 'auto' }}>
+      <Text align="left" color="muted" size="sm" whiteSpace="nowrap">
+        {dayjs().startOf('day').second(currentTime).format('mm:ss')} /{' '}
+        {dayjs().startOf('day').second(totalTime).format('mm:ss')}
+      </Text>
+    </Box>
   )
 )
 
@@ -123,13 +133,15 @@ function AudioPlayer({
   }, [stack])
 
   return (
-    <div className="mb-4 flex items-center gap-3">
+    <Flex align="center" gap="sm" mb="md" minWidth="0" width="100%">
       {ready && (
         <>
           {currentActive === instanceId && (
             <Button
-              className="component-bg-lighter-with-hover mb-6 p-2! px-4! sm:mb-0"
-              variant="plain"
+              mb={{ base: 'lg', sm: 'none' }}
+              p="sm"
+              px="md"
+              variant="secondary"
               onClick={() => {
                 let newSpeed = playbackSpeed + 0.5
 
@@ -144,42 +156,59 @@ function AudioPlayer({
             </Button>
           )}
           <Button
-            className="mb-6 sm:mb-0"
             icon={isPlaying ? 'tabler:pause' : 'tabler:play'}
+            mb={{ base: 'lg', sm: 'none' }}
             onClick={onPlayPause}
           />
         </>
       )}
-      <div className="relative flex w-full flex-col items-center gap-2 *:first:w-full sm:flex-row sm:gap-3">
+      <Flex
+        align="center"
+        direction={{ base: 'column', sm: 'row' }}
+        gap="sm"
+        minWidth="0"
+        position="relative"
+        width="100%"
+      >
         {!ready && (
           <Icon
-            className="text-bg-500 absolute top-1/2 left-1/2 size-8 -translate-x-1/2 -translate-y-1/2"
+            color="muted"
             icon="svg-spinners:ring-resize"
+            position="absolute"
+            size="2rem"
+            style={{
+              left: '50%',
+              top: '50%',
+              transform: 'translate(-50%, -50%)'
+            }}
           />
         )}
-        <WavesurferPlayer
-          barGap={2}
-          barRadius={100}
-          barWidth={3}
-          cursorColor={themeColor}
-          height={50}
-          progressColor={themeColor}
-          url={mediaUrl}
-          waveColor={
-            derivedTheme === 'dark' ? bgTempPalette[700] : bgTempPalette[400]
-          }
-          width="100%"
-          onPause={() => setIsPlaying(false)}
-          onPlay={() => setIsPlaying(true)}
-          onReady={onReady}
-        />
+        <Box width="100%">
+          <WavesurferPlayer
+            barGap={2}
+            barRadius={100}
+            barWidth={3}
+            cursorColor={themeColor}
+            height={50}
+            progressColor={themeColor}
+            url={mediaUrl}
+            waveColor={
+              derivedTheme === 'dark' ? bgTempPalette[700] : bgTempPalette[400]
+            }
+
+            width="100%"
+            onPause={() => setIsPlaying(false)}
+            onPlay={() => setIsPlaying(true)}
+            onReady={onReady}
+          />
+        </Box>
         {ready && (
           <>
             <TimeDisplay currentTime={currentTime} totalTime={totalTime} />
           </>
         )}
-      </div>
-    </div>
+      </Flex>
+    </Flex>
   )
 }
 

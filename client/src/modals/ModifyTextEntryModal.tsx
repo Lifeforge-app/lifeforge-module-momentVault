@@ -1,11 +1,17 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import z from 'zod'
 
-import type { InferInput } from '@lifeforge/api'
-import { FormModal, defineForm, toast } from '@lifeforge/ui'
+import { useForgeMutation } from '@lifeforge/api'
+import { FormModal, TextAreaField, createDefaultValues } from '@lifeforge/ui'
 
 import { forgeAPI } from '@/manifest'
 
 import type { MomentVaultEntry } from '..'
+
+const schema = z.object({
+  content: z.string().min(1, 'Required')
+})
 
 function ModifyTextEntryModal({
   data: { initialData },
@@ -16,55 +22,47 @@ function ModifyTextEntryModal({
   }
   onClose: () => void
 }) {
-  const queryClient = useQueryClient()
-
-  const mutation = useMutation(
-    forgeAPI.entries.update
-      .input({
-        id: initialData?.id || ''
-      })
-      .mutationOptions({
-        onSuccess: () => {
-          queryClient.invalidateQueries({
-            queryKey: ['momentVault', 'entries']
-          })
-          onClose()
-        },
-        onError: () => {
-          toast.error('Failed to modify text entry')
-        }
-      })
+  const updateMutation = useForgeMutation(
+    forgeAPI.entries.update.input({ id: initialData?.id || '' }),
+    {
+      action: 'update',
+      queryKey: forgeAPI.entries.key,
+      onSuccess: () => onClose()
+    }
   )
 
-  const { formProps } = defineForm<
-    InferInput<typeof forgeAPI.entries.update>['body']
-  >({
-    title: 'Update Entry',
-    namespace: 'apps.momentVault',
-    icon: 'tabler:pencil',
-    onClose,
-    submitButton: 'update'
-  })
-    .typesMap({
-      content: 'textarea'
-    })
-    .setupFields({
-      content: {
-        placeholder: 'Something amazing happened today...',
-        required: true,
-        icon: 'tabler:file-text',
-        label: 'Text Content'
-      }
-    })
-    .initialData({
+  const form = useForm({
+    defaultValues: {
+      ...createDefaultValues(schema),
       content: initialData?.content || ''
-    })
-    .onSubmit(async data => {
-      await mutation.mutateAsync(data)
-    })
-    .build()
+    },
+    resolver: zodResolver(schema)
+  })
 
-  return <FormModal {...formProps} />
+  return (
+    <FormModal
+      form={form}
+      submissionConfig={{
+        template: 'update',
+        handler: updateMutation.mutateAsync
+      }}
+      uiConfig={{
+        icon: 'tabler:pencil',
+        namespace: 'apps.momentVault',
+        title: 'Update Entry',
+        onClose
+      }}
+    >
+      <TextAreaField
+        required
+        control={form.control}
+        icon="tabler:file-text"
+        label="Text Content"
+        name="content"
+        placeholder="Something amazing happened today..."
+      />
+    </FormModal>
+  )
 }
 
 export default ModifyTextEntryModal

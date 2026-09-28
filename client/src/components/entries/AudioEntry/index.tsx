@@ -6,11 +6,14 @@ import { useState } from 'react'
 
 import type { InferOutput } from '@lifeforge/api'
 import {
+  Box,
   Card,
   ConfirmationModal,
   ContextMenu,
   ContextMenuItem,
+  Flex,
   Icon,
+  Text,
   toast,
   useModalStore
 } from '@lifeforge/ui'
@@ -85,7 +88,7 @@ function AudioEntry({
         .mutate(undefined)
 
       queryClient.invalidateQueries({
-        queryKey: ['momentVault', 'entries']
+        queryKey: forgeAPI.entries.key
       })
     } catch {
       toast.error('Failed to toggle reviewed status')
@@ -94,23 +97,38 @@ function AudioEntry({
 
   return (
     <Card as="li" id={`audio-entry-${entry.id}`}>
-      <div className="mr-16">
+      <Box mr="3xl">
         <AudioPlayer entry={entry} />
-      </div>
+      </Box>
       {entry.transcription && (
-        <p className="text-bg-500 before:bg-custom-500 relative mt-6 pl-4 whitespace-pre-wrap before:absolute before:top-0 before:left-0 before:h-full before:w-1 before:rounded-full">
+        <Box mt="lg" pl="md" position="relative">
+          <Box
+            bg="primary"
+            bottom="0"
+            left="0"
+            position="absolute"
+            r="full"
+            top="0"
+            width="0.25rem"
+          />
           {entry.reviewed && (
-            <div className="text-custom-500 mb-2 flex items-center gap-1 font-medium">
-              <Icon icon="tabler:check" /> Reviewed
-            </div>
+            <Flex align="center" gap="xs" mb="sm">
+              <Icon color="primary" icon="tabler:check" />
+              <Text color="primary" weight="medium">
+                Reviewed
+              </Text>
+            </Flex>
           )}
-          {entry.transcription}
-        </p>
+          <Text as="p" color="muted" whiteSpace="pre-wrap">
+            {entry.transcription}
+          </Text>
+        </Box>
       )}
-      <p className="text-bg-500 mt-4 flex items-center gap-2">
-        <Icon icon="tabler:clock" /> {dayjs(entry.created).fromNow()}
-      </p>
-      <ContextMenu classNames={{ wrapper: 'absolute top-4 right-4' }}>
+      <Flex align="center" gap="sm" mt="md">
+        <Icon color="muted" icon="tabler:clock" />
+        <Text color="muted">{dayjs(entry.created).fromNow()}</Text>
+      </Flex>
+      <ContextMenu position="absolute" right="1rem" top="1rem">
         {entry.transcription === '' ? (
           <ContextMenuItem
             icon="tabler:file-text"

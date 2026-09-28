@@ -6,6 +6,7 @@ import {
   ConfirmationModal,
   EmptyStateScreen,
   Pagination,
+  Stack,
   WithQuery,
   toast,
   useModalStore
@@ -44,7 +45,7 @@ function EntryList({
               .mutate(undefined)
 
             await queryClient.invalidateQueries({
-              queryKey: ['momentVault', 'entries']
+              queryKey: forgeAPI.entries.key
             })
           } catch (error: any) {
             toast.error(`Failed to delete entry: ${error.message}`)
@@ -70,12 +71,13 @@ function EntryList({
         data.totalItems > 0 ? (
           <>
             <Pagination
-              className="pagination mb-6"
+              className="pagination"
+              mb="lg"
               page={page}
               totalPages={data.totalPages}
               onPageChange={setPage}
             />
-            <ul className="space-y-3">
+            <Stack as="ul" gap="sm">
               {data.items.map(entry => {
                 if (entry.type === 'audio') {
                   return (
@@ -108,9 +110,11 @@ function EntryList({
                   )
                 }
               })}
-            </ul>
+            </Stack>
             <Pagination
-              className="pagination mt-6 mb-24 md:mb-6"
+              className="pagination"
+              mb={{ base: '3xl', md: 'lg' }}
+              mt="lg"
               page={page}
               totalPages={data.totalPages}
               onPageChange={setPage}

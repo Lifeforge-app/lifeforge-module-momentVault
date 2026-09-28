@@ -38,10 +38,11 @@ function TextType({ onSuccess }: { onSuccess: () => void }) {
         onChange={setText}
       />
       <Button
-        className="mt-6 w-full"
         disabled={text.trim().length === 0}
         icon="tabler:plus"
         loading={submitLoading}
+        mt="lg"
+        width="100%"
         onClick={onSubmit}
       >
         Create

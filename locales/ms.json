@@ -14,7 +14,9 @@
     "retranscribe": "Transkripsi Semula",
     "markAsReviewed": "Tandakan sebagai Ditinjau",
     "markAsUnreviewed": "Tandakan sebagai Belum Disemak",
-    "cleanup": "Bersihkan"
+    "cleanup": "Bersihkan",
+    "selectPhotos": "Pilih Foto",
+    "clearPhotos": "Kosongkan Foto"
   },
   "modals": {
     "addEntry": "Tambah Entri",

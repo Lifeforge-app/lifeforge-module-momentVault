@@ -14,7 +14,9 @@
     "retranscribe": "重新转录",
     "markAsReviewed": "标记为已审核",
     "markAsUnreviewed": "标记为未审核",
-    "cleanup": "清理"
+    "cleanup": "清理",
+    "selectPhotos": "选择照片",
+    "clearPhotos": "清除照片"
   },
   "modals": {
     "addEntry": "添加条目",

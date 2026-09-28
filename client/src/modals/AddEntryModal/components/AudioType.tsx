@@ -4,7 +4,16 @@ import { useRef, useState } from 'react'
 import WaveSurfer from 'wavesurfer.js'
 
 import { useModuleTranslation } from '@lifeforge/localization'
-import { Button, Icon, toast, usePersonalization } from '@lifeforge/ui'
+import {
+  Box,
+  Button,
+  Flex,
+  Icon,
+  Text,
+  colorWithOpacity,
+  toast,
+  usePersonalization
+} from '@lifeforge/ui'
 
 import { forgeAPI } from '@/manifest'
 
@@ -161,22 +170,52 @@ function AudioType({
 
   return (
     <>
-      <div className="bg-bg-200/50 shadow-custom dark:bg-bg-800/50 flex w-full flex-col rounded-md p-6">
-        <div className="text-bg-500 flex items-center gap-3">
-          <Icon className="size-6" icon="tabler:microphone" />
-          <span className="font-medium">
-            {t(`apps.momentVault:inputs.audio`)}{' '}
-            <span className="text-red-500">*</span>
-          </span>
-        </div>
+      <Flex
+        shadow
+        bg={{
+          base: colorWithOpacity('bg-200', '50%'),
+          dark: colorWithOpacity('bg-800', '50%')
+        }}
+        direction="column"
+        p="lg"
+        r="md"
+        width="100%"
+      >
+        <Flex align="center" gap="sm">
+          <Icon color="muted" icon="tabler:microphone" size="1.5rem" />
+          <Text color="muted" weight="medium">
+            {t(`inputs.audio`)}{' '}
+            <Text as="span" color="red-500">
+              *
+            </Text>
+          </Text>
+        </Flex>
         {audioURL && (
           <>
-            <div className="bg-bg-300/50 dark:bg-bg-800 shadow-custom mt-6 flex w-full items-center gap-3 rounded-md p-4 md:pr-8 [&>*:nth-child(2)]:w-full">
+            <Flex
+              shadow
+              align="center"
+              bg={{
+                base: colorWithOpacity('bg-300', '50%'),
+                dark: 'bg-800'
+              }}
+              gap="sm"
+              mt="lg"
+              p="md"
+              pr={{ md: 'xl' }}
+              r="md"
+              width="100%"
+            >
               <Button
                 icon={isPlaying ? 'tabler:pause' : 'tabler:play'}
                 onClick={onPlayPause}
               />
-              <div className="flex w-full flex-col items-center gap-2 *:first:w-full sm:flex-row sm:gap-3">
+              <Flex
+                align="center"
+                direction={{ base: 'column', sm: 'row' }}
+                gap="sm"
+                width="100%"
+              >
                 <WavesurferPlayer
                   barGap={2}
                   barRadius={100}
@@ -195,22 +234,39 @@ function AudioType({
                   onPlay={() => setIsPlaying(true)}
                   onReady={onReady}
                 />
-                <p className="text-bg-500 w-full text-left text-sm whitespace-nowrap sm:w-auto">
-                  {dayjs().startOf('day').second(currentTime).format('mm:ss')} /{' '}
-                  {dayjs().startOf('day').second(totalTime).format('mm:ss')}
-                </p>
-              </div>
-            </div>
+                <Box width={{ base: '100%', sm: 'auto' }}>
+                  <Text
+                    align="left"
+                    color="muted"
+                    size="sm"
+                    whiteSpace="nowrap"
+                  >
+                    {dayjs().startOf('day').second(currentTime).format('mm:ss')}{' '}
+                    / {dayjs().startOf('day').second(totalTime).format('mm:ss')}
+                  </Text>
+                </Box>
+              </Flex>
+            </Flex>
             {transcription && (
-              <div className="border-custom-500 mt-6 border-l-4 pl-4">
-                <p className="text-bg-500">{transcription}</p>
-              </div>
+              <Box mt="lg" pl="md" position="relative">
+                <Box
+                  bg="primary"
+                  bottom="0"
+                  left="0"
+                  position="absolute"
+                  r="full"
+                  top="0"
+                  width="0.25rem"
+                />
+                <Text color="muted">{transcription}</Text>
+              </Box>
             )}
             <Button
-              className="mt-6 w-full"
               icon="tabler:transfer"
               loading={transcribeLoading}
+              mt="lg"
               variant="plain"
+              width="100%"
               onClick={() => {
                 transcribeText()
               }}
@@ -220,8 +276,9 @@ function AudioType({
           </>
         )}
         <Button
-          className="mt-4 w-full"
           icon={recording ? 'tabler:player-stop' : 'tabler:microphone'}
+          mt="md"
+          width="100%"
           onClick={() => {
             if (audioURL !== null) {
               setOverwriteAudioWarningModalOpen(true)
@@ -238,12 +295,13 @@ function AudioType({
         >
           {recording ? 'Stop' : 'Record'}
         </Button>
-      </div>
+      </Flex>
       <Button
-        className="mt-8! w-full"
         disabled={!audioURL}
         icon="tabler:plus"
         loading={submitLoading}
+        mt="xl"
+        width="100%"
         onClick={onSubmit}
       >
         Create

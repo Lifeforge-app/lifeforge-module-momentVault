@@ -2,7 +2,7 @@ import { useState } from 'react'
 import PhotoAlbum from 'react-photo-album'
 
 import { useModuleTranslation } from '@lifeforge/localization'
-import { Button, Icon, toast } from '@lifeforge/ui'
+import { Box, Button, Flex, Icon, Text, surface, toast } from '@lifeforge/ui'
 
 import { forgeAPI } from '@/manifest'
 
@@ -102,15 +102,25 @@ function PhotoType({ onSuccess }: { onSuccess: () => void }) {
 
   return (
     <>
-      <div className="shadow-custom component-bg-lighter flex w-full flex-col rounded-md p-6">
-        <div className="text-bg-500 flex items-center gap-3">
-          <Icon className="size-6" icon="tabler:photo" />
-          <span className="font-medium">
-            {t(`inputs.photos`)} <span className="text-red-500">*</span>
-          </span>
-        </div>
+      <Flex
+        bg={surface.light}
+        direction="column"
+        p="lg"
+        r="md"
+        shadow
+        width="100%"
+      >
+        <Flex align="center" gap="sm">
+          <Icon color="muted" icon="tabler:photo" size="1.5rem" />
+          <Text color="muted" weight="medium">
+            {t(`inputs.photos`)}{' '}
+            <Text as="span" color="red-500">
+              *
+            </Text>
+          </Text>
+        </Flex>
         {photos.length > 0 && (
-          <div className="mt-6">
+          <Box mt="lg">
             <PhotoAlbum
               layout="rows"
               photos={photos.map(photo => ({
@@ -123,18 +133,24 @@ function PhotoType({ onSuccess }: { onSuccess: () => void }) {
                 <img
                   {...imageProps}
                   alt=""
-                  className="h-full w-full rounded-md object-cover"
+                  style={{
+                    ...imageProps.style,
+                    borderRadius: 'var(--radius-md)',
+                    height: '100%',
+                    objectFit: 'cover',
+                    width: '100%'
+                  }}
                 />
               )}
               spacing={8}
             />
-          </div>
+          </Box>
         )}
         {photos.length ? (
           <Button
             dangerous
-            className="mt-6"
             icon="tabler:trash"
+            mt="lg"
             variant="secondary"
             onClick={() => setPhotos([])}
           >
@@ -142,19 +158,20 @@ function PhotoType({ onSuccess }: { onSuccess: () => void }) {
           </Button>
         ) : (
           <Button
-            className="mt-6"
             icon="tabler:plus"
+            mt="lg"
             variant="secondary"
             onClick={selectPhotos}
           >
             Select Photos
           </Button>
         )}
-      </div>
+      </Flex>
       <Button
-        className="mt-6 w-full"
         icon="tabler:plus"
         loading={submitLoading}
+        mt="lg"
+        width="100%"
         onClick={onSubmit}
       >
         Create

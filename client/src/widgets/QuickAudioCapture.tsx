@@ -2,9 +2,11 @@ import { useQueryClient } from '@tanstack/react-query'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 import type { WidgetConfig } from '@lifeforge/configs'
-import { Button, Widget, toast, useDivSize } from '@lifeforge/ui'
+import { Button, Flex, Widget, toast, useDivSize } from '@lifeforge/ui'
 
 import { forgeAPI } from '@/manifest'
+
+import * as styles from './QuickAudioCapture.css'
 
 type RecordingState = 'idle' | 'recording' | 'submitting'
 
@@ -73,7 +75,7 @@ function QuickAudioCapture() {
 
           toast.success('Audio moment captured!')
           queryClient.invalidateQueries({
-            queryKey: ['momentVault', 'entries']
+            queryKey: forgeAPI.entries.key
           })
         } catch {
           toast.error('Failed to save audio')
@@ -125,24 +127,31 @@ function QuickAudioCapture() {
     [state, startRecording]
   )
 
+  const isTall = width < height
+
   return (
-    <Widget className="p-2! min-[400px]:p-4!" icon="tabler:microphone">
-      <div ref={wrapperRef} className="flex-center min-h-0 flex-1">
+    <Widget className={styles.widget} icon="tabler:microphone">
+      <Flex ref={wrapperRef} centered flex="1" minHeight="0">
         <Button
-          className={`aspect-square touch-none min-[400px]:rounded-full! ${
-            width < height ? 'h-full w-full min-[400px]:h-auto' : 'h-full'
-          } ${state === 'recording' ? 'animate-pulse' : ''}`}
+          className={[
+            styles.button,
+            isTall ? styles.buttonTall : '',
+            state === 'recording' ? styles.pulsing : ''
+          ]
+            .filter(Boolean)
+            .join(' ')}
           icon={
             state === 'recording'
               ? 'tabler:player-stop-filled'
               : 'tabler:microphone'
           }
-          iconClassName="size-full! sm:size-10!"
+          iconProps={{ size: { base: '100%', sm: '2.5rem' } }}
           loading={state === 'submitting'}
+          style={!isTall ? { height: '100%' } : undefined}
           variant={state === 'recording' ? 'secondary' : 'primary'}
           onPointerDown={handlePointerDown}
         />
-      </div>
+      </Flex>
     </Widget>
   )
 }

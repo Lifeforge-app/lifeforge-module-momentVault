@@ -4,10 +4,13 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import { useCallback } from 'react'
 
 import {
+  Box,
   Card,
   ContextMenu,
   ContextMenuItem,
+  Flex,
   Icon,
+  Text,
   useModalStore
 } from '@lifeforge/ui'
 
@@ -32,15 +35,27 @@ function TextEntry({
 
   return (
     <Card as="li">
-      <div className="mr-16">
-        <div className="border-custom-500 border-l-4 pl-4">
-          <p className="text-bg-500 whitespace-pre-wrap">{entry.content}</p>
-        </div>
-        <p className="text-bg-500 mt-4 flex items-center gap-2">
-          <Icon icon="tabler:clock" /> {dayjs(entry.created).fromNow()}
-        </p>
-      </div>
-      <ContextMenu classNames={{ wrapper: 'absolute top-4 right-4' }}>
+      <Box mr="3xl">
+        <Box pl="md" position="relative">
+          <Box
+            bg="primary"
+            bottom="0"
+            left="0"
+            position="absolute"
+            r="full"
+            top="0"
+            width="0.25rem"
+          />
+          <Text as="p" color="muted" whiteSpace="pre-wrap">
+            {entry.content}
+          </Text>
+        </Box>
+        <Flex align="center" gap="sm" mt="md">
+          <Icon color="muted" icon="tabler:clock" />
+          <Text color="muted">{dayjs(entry.created).fromNow()}</Text>
+        </Flex>
+      </Box>
+      <ContextMenu position="absolute" right="1rem" top="1rem">
         <ContextMenuItem
           icon="tabler:pencil"
           label="Edit"
