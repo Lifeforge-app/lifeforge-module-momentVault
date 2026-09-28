@@ -81,7 +81,7 @@ function AddEntryModal({
   return (
     <Box minWidth="50vw">
       <ModalHeader icon="tabler:plus" title="Add Entry" onClose={onClose} />
-      <Stack gap="sm">
+      <Stack>
         <ListboxInput
           required
           icon="tabler:apps"
